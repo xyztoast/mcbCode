@@ -116,6 +116,7 @@
     opacity: 0.5;
     margin: auto;
     margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .list {
@@ -130,6 +131,17 @@
 
 w {
     color: #ffffff;
+}
+
+#list a {
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    color: #bebebe;
+}
+
+#list a:hover {
+    text-decoration: underline;
+    color: #05ee93;
 }
   </style>
 </head>
@@ -155,11 +167,26 @@ w {
 </div>
 </div>
 <div class="divider"></div>
-<div class="list">
-    <p><w>Writing & Formatting</w><br><br> - Chat Commands vs MCFunction<br> - MCFunction compared to other languages</p>
+
+
+
+
+<div class="list" id="list">
+    <p><w>Writing & Formatting</w><br><br>
+    - <a href="https://xyztoast.github.io/mcfunction/docs/intro-to-mcfunction">Intro to MCFunction</a><br>
+    - MCFunction compared to other languages
+    </p>
     <br>
     <p><w>How to Write</w><br><br> - Chat Commands vs MCFnction</p>
 </div>
+
+
+
+
+
+
+
+
 
 
 
