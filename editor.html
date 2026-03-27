@@ -1,38 +1,9 @@
-<!doctype html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="https://xyztoast.github.io/mcfunction/theme/favicon.png">
-  <link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/site.css">
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>mcbCode</title>
-  <style>
-    html,body{
-      min-height:100%;
-      margin:0;
-      font-family:'mcfont', sans-serif;
-      background:#0c0c0c;
-      font-weight: 0;
-      color:#bebebe;
-      justify-content: center;
-      margin: auto;
-      text-align: center;
-    }
 
-    h1{
+<!-- highlight.js script here DO NOT TOUCH -->
 
-      font-family: "mcfontb", sans-serif;
-      font-size: 40px;
-      margin-top: 20vh;
-      color: #ffffff;
-      text-align: center;
-    }
-
-    h2 {
-     font-size: 25px; 
-     color: #ffffff;
-    }
 <link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/site.css">
 <meta charset="UTF-8">
 <link rel="icon" href="/icons/mcbcode.png">
@@ -41,15 +12,11 @@
   body {
     margin: 0;
     background-color: #323232;
+    font-family: monospace;
     font-family: mcfont;
     color: #fff;
   }
 
-    a {
-        text-decoration: none;
-        color: #ffffff;
-        transition: color 0.2s ease-in-out;
-    }
   .editor {
     display: flex;
     height: 100vh;
@@ -57,10 +24,6 @@
     align-items: flex-start;
   }
 
-    a:hover {
-        text-decoration: none;
-        color: #05ee93;
-    }
   .navi {
     font-size: 14px;
     padding: 3 3px;
@@ -76,16 +39,8 @@
     align-items: center;
     padding-top: 1px
 
-  .mcbc {
-    position: fixed;
-    left: 5px;
-    top: 10px;
-    height: 50px;
-    width: 50px;
   }
 
-  g {
-      color: #05ee93;
   .nav-left img {
     width: 20px;
     height: 20px;
@@ -93,24 +48,12 @@
     padding-top: 1px
   }
 
-  c {
-      color: #e7007b;
-  }
   img {
     padding-top: 0px;
     padding-left: 0px;
 
   }
   button {
-      text-align: center;
-      background-color: #313131;
-      border: none;
-      font-size: 18px;
-      border-radius: 12px;
-      padding: 8px 12px;
-      color: #ffffff;
-      transition: color 0.2s ease-in-out;
-      cursor: pointer;
     background-color: transparent;
     border: none;
     color: #f0f0f0;
@@ -119,18 +62,11 @@
   }
 
   button:hover {
-      color: #05ee93;
     border: none;
     color: #f0f0f0;
     user-select: none;
   }
 
-  #tryitout {
-      color: #0c0c0c;
-      background-color: #05ee93;
-      box-shadow: 0 0 20px 10px #05ee934;
-      transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
-      border: 4px solid #00a459;
   .line-numbers {
     background-color: transparent;
     padding: 0 7px;
@@ -146,9 +82,6 @@
     justify-content: flex-end;
   }
 
-  #tryitout:hover {
-      color: #ffffff;
-      background-color: #00a95c;
   .code-area {
     flex: 1;
     padding: 0 2px;
@@ -166,51 +99,17 @@
     height: 100%;
   }
 
-.navi {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    height: 75px;
-    background-color: rgba(45 45 45 0.6);
-    backdrop-filter: blur(6px);
-    display: flex;
-}
   .fade {
     opacity: 0;
     transition: opacity 0.2s ease-in;
   }
 
-.quick-links {
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    max-width: 700px;
-    text-align: center;
-    margin: auto;
-}
-
-.divider {
-    border-top: 2px solid #bebebe;
-    width: 30%;
-    opacity: 0.5;
-    margin: auto;
-    margin-top: 50px;
-}
-
-.content-wrapper {
-    display: flex;
-    width: 90%;
-    margin: auto;
-}
   .nav-item {
     position: relative;
     display: inline-block;
     padding-top: 0;
   }
 
-.content {
-    flex: 1;
-}
   .nav-dropdown {
     display: none;
     position: absolute;
@@ -225,9 +124,6 @@
     flex-direction: column;
   }
 
-#documentation {
-      border: 4px solid #3f3f3f;
-}
   .nav-dropdown div {
     padding: 6px 12px;
     cursor: pointer;
@@ -237,31 +133,10 @@
     background-color: #323738;
   }
 
-code {
-    font-family: mcfont;
-    background-color: #1d1d1d;
-    padding: 16px 12px;
-    align-items: center;
-    text-align: center;
   .nav-item:hover .nav-dropdown {
     display: flex;
-    width: 80%;
-    margin: auto;
-    flex: 1;
-    gap: 6px;
-    user-select: none;
-}
-
-
-aa {
-    color: #55ff55;
-}
   }
 
-aao {
-    color: #55ff55;
-    opacity: 0.5;
-}
   .sub-dropdown {
     display: none;
     flex-direction: column;
@@ -273,44 +148,25 @@ aao {
     font-size: 8px;
   }
 
-cc {
-    color: #ff5555;
-}
   #colorFormat:hover .sub-dropdown {
     display: flex;
     border-radius: 5px;
   }
 
-ee {
-    color: #ffff55;
-}
   .sub-dropdown div {
     padding: 6px 12px;
     cursor: pointer;
     border-radius: 5px;
   }
 
-rr {
-    color: #ffaa00;
-}
   .sub-dropdown div:hover {
     background-color: #323738;
   }
 
-bb {
-    color: #55ffff;
-}
   #exportCode {
     color: #00b2ff;
   }
 
-footer {
-    color: #343434;
-}
-footer g {
-    color: #008e4c;
-}
-  </style>
   .delete {
     color: #ff4d4d;
   }
@@ -325,105 +181,17 @@ footer g {
 </style>
 </head>
 <body>
-    <div class="navi">
-        <div style="text-align: left; padding-left: 20px;"><h2>mcb<g>Code</g></h2></div>
-    <div class="quick-links">
-        <a href="https://xyztoast.github.io/mcfunction/editor">Editor</a>
-        <div style="padding-left: 60%"></div>
-        <a href="https://github.com/xyztoast/mcfunction">Source</a>
-        <div style="padding-left: 60%"></div>
-        <a href="https://github.com/xyztoast/mcfunction/docs">Docs</a>
-        <a href="https://xyztoast.github.io/mcfunction/docs">Docs</a>
     <div class="top-thing" style="display: flex; align-items: center;">
         <a href="https://xyztoast.github.io/mcfunction" style="padding-left: 12px;"><img src="https://xyztoast.github.io/icons/mcbcode.png" alt="icon" style="width: 36px"></a>
     <h3 style="padding: 0px 12px;">mcb<g>Code</g></h3>
-
-        </div>
+    
     </div>
-<h1>mcb<g>Code</g></h1>
-<p style="color: #fff;">The <g>first</g> exclusively Minecraft Bedrock <c>.mcfunction</c> code editor</p>
-<div style="user-select: none;">
-<div class="top-navi">
-    <a href="https://xyztoast.github.io/mcfunction/editor"><button id="tryitout">Try it out</button></a>
-    <a href="https://xyztoast.github.io/mcfunction/docs"><button id="documentation">Documentation</button></a>
-</div>
-</div>
-<div style="margin-top: 50px"></div>
-<div class="content-wrapper">
-<div class="content">
-<h2><g>Easy</g> Coding</h2>
-<p>User-friendly interface for Minecraft commands</p>
-<div style="margin-top: 50px"></div>
-</div>
-<div class="content">
-<h2>Completely <g>Free</g> to Use</h2>
-<p>Because charging money is overrated</p>
-<div style="margin-top: 50px"></div>
-</div>
-<div class="content">
-<h2>Helpful <g>Tools</g></h2>
-<p>Documentation when you don't know how</p>
-</div>
-</div>
-
-<div class="divider"></div>
-<h2>A Quick <g>Preview</g></h2>
-<p>It highlights your MCFunction with colors to help you get correct syntax while writing code.</p>
-<br>
-<code>
-    <ee>tellraw</ee> <cc>@a</cc> <rr>{</rr><bb>"rawtext"<rr>:[{</rr>"text"<rr>:</rr>"<aao>§a</aao><aa>Welcome to mcbCode!</aa>"<rr>}]}</rr></bb>
-</code>
-<br><br>
-<code>
-    <ee>give</ee> <cc>@s</cc> <aa>diamond_sword</aa>
-</code>
-<br><br>
-<code>
-    <ee>tp</ee> <cc>@e[<rr>type</rr>=<aa>zombie</aa>]</cc> <bb>~ ~ ~</bb>
-</code>
-<p style="font-size: 12px; opacity: 0.1;">Note: not exact coloring</p>
-<br>
-<br>
-<br>
-<h2>The <g>First</g> MCFunction Code Editor</h2>
-<div class="wrapper" style="display: flex; width: 80%; text-align: right; margin: auto;">
-    <p style="font-size: 16px">No other tool similar to this has been made. <qqq style="color: #ffffff">mcb</qqq><g>Code</g> will give creators a simple, clean place to write and organize complex command chains without the mess of the in-game menus.</p>
-    <img src="https://xyztoast.github.io/mcfunction/img/diamond_pickaxe.png" style="width: 96px; height: 96px;">
-    </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h2>An Editor that <g>Makes Sense</g></h2>
-<div class="wrapper" style="display: flex; width: 80%; text-align: left; margin: auto;">
-    <img src="https://xyztoast.github.io/mcfunction/img/bread.webp" style="width: 96px; height: 96px;">
-    <p style="font-size: 16px"><qqq style="color: #ffffff">mcb</qqq><g>Code</g> has a simle yet powerful user interface that transforms the boring notepad editor into a professional space.</p>
-</div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<footer>Not affiliated  with Microsoft or Mojang AB.<br><br>
-© Copyright 2026 mcb<g>Code</g></footer>
-<br><br>
-
-
-
-
-
-
   <div class="navi">
     <div class="nav-left">
       <div class="nav-item">
+        <a href="https://xyztoast.github.io"><img src="https://xyztoast.github.io/icons/mcbcode.png" alt="icon"></a>
       </div>
+      <div class="nav-item">
       <div class="nav-item" style="padding-left: 24px;">
         <button>File</button>
         <div class="nav-dropdown">
@@ -462,15 +230,9 @@ footer g {
           </div>
         </div>
       </div>
-      <div class="nav-item">
-        <button>Shortcuts</button>
-        <div class="nav-dropdown">
-          <p style="padding: 0px 6px; width: 250px; font-size: 12px">Undo - Ctrl+Z<br><br>Redo - Ctrl+Y<br><br>Download - Ctrl+S<br><br>Redo - Ctrl+Y<br><br>Copy Code - Ctrl+A, Ctrl+C</p>
-        </div>
-      </div>
-
     </div>
   </div>
+
   <div class="editor" id="editor">
       <pre id="lineNumbers" class="line-numbers">1</pre>
     <textarea class="code-area" id="codeArea" spellcheck="false" placeholder="mcbCode made by idktoast">give @a stick</textarea>
@@ -489,8 +251,6 @@ footer g {
       lineNumbers.textContent = lineContent;
     }
 
-<script data-goatcounter="https://idktoast.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
     codeArea.addEventListener('input', () => {
       updateLineNumbers();
     });
@@ -512,34 +272,18 @@ footer g {
       }
     });
 
-// 1. Wrap the export logic in a reusable function
-const handleExport = () => {
-  if (!codeArea.value) return alert('Nothing to export');
-  
-  let fileName = prompt('Enter file name');
-  if (!fileName) return;
-
-  fileName = fileName.replace(/[^a-z0-9_\-]/gi, '_') + '.mcfunction';
-  const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = fileName;
-  a.click();
-  URL.revokeObjectURL(a.href);
-};
-
-// 2. Click event for the button
-document.getElementById('exportCode').addEventListener('click', handleExport);
-
-// 3. Keydown event for Ctrl + S
-document.addEventListener('keydown', (e) => {
-  // Check if 's' is pressed while Ctrl (or Command on Mac) is held
-  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-    e.preventDefault(); // Prevent the browser's default save dialog
-    handleExport();
-  }
-});
-
+    document.getElementById('exportCode').addEventListener('click', () => {
+      if(!codeArea.value) return alert('Nothing to export');
+      let fileName = prompt('Enter file name');
+      if (!fileName) return;
+      fileName = fileName.replace(/[^a-z0-9_\-]/gi, '_') + '-idktoast.mcfunction';
+      const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
 
     const colorMenu = document.getElementById('colorMenu');
     colorMenu.querySelectorAll('div').forEach(item => {
