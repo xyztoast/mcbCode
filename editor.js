@@ -51,3 +51,37 @@ require(["vs/editor/editor.main"], function () {
   );
 
 });
+
+async function loadCommandList() {
+
+  const res =
+    await fetch("commands/commands.json");
+
+  return await res.json();
+
+}
+
+async function loadCommands() {
+
+  const names =
+    await loadCommandList();
+
+  const commands = [];
+
+  for (const name of names) {
+
+    const res =
+      await fetch(
+        `commands/${name}.json`
+      );
+
+    const json =
+      await res.json();
+
+    commands.push(json);
+
+  }
+
+  return commands;
+
+}
