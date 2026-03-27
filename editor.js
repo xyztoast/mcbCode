@@ -85,3 +85,76 @@ async function loadCommands() {
   return commands;
 
 }
+
+
+loadCommands().then(commands => {
+
+  const commandNames =
+    commands.map(c => c.name);
+
+  const keywordRegex =
+    new RegExp(
+      "\\b(" +
+      commandNames.join("|") +
+      ")\\b"
+    );
+
+  monaco.languages.setMonarchTokensProvider(
+    "mcfunction",
+    {
+      tokenizer: {
+        root: [
+
+          [
+            keywordRegex,
+            "keyword"
+          ],
+
+          [
+            /@[pares]/,
+            "variable"
+          ],
+
+          [
+            /#.*$/,
+            "comment"
+          ]
+
+        ]
+      }
+    }
+  );
+
+});
+
+
+
+monaco.languages.registerCompletionItemProvider(
+  "mcfunction",
+  {
+
+    provideCompletionItems() {
+
+      const suggestions =
+        commands.map(cmd => ({
+
+          label: cmd.name,
+
+          kind:
+            monaco.languages
+            .CompletionItemKind
+            .Keyword,
+
+          insertText: cmd.name,
+
+          documentation:
+            cmd.description
+
+        }));
+
+      return { suggestions };
+
+    }
+
+  }
+);
