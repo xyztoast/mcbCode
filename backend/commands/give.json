@@ -6,4 +6,3 @@
     { "type": "int", "required": false },
     { "type": "json_component", "required": false }
   ]
-}
