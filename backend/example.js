@@ -7,13 +7,22 @@ const commandCache = {};
 async function applyHighlighting(text) {
     const lines = text.split('\n');
     let finalHtml = "";
-    let errorLines = []; // New array to track errors
+    const errorLines = []; // Track lines with errors
 
+    for (let line of lines) {
     for (let i = 0; i < lines.length; i++) {
-        const segments = lines[i].split(/(\s+)/);
+        const line = lines[i];
+        if (line.trim().startsWith('#')) {
+            finalHtml += `<span class="hl-comment">${escapeHtml(line)}</span>\n`;
+            continue;
+        }
+
+        const segments = line.split(/(\s+)/);
+        // We use a sync-first approach to avoid 'await' lag
+        finalHtml += processSegmentsSync(segments) + "\n";
         const processed = processSegmentsSync(segments);
         
-        // If line has an error, add to list
+        // If the processed HTML contains an error class, mark this line
         if (processed.includes('hl-error')) {
             errorLines.push(i + 1);
         }
@@ -21,9 +30,9 @@ async function applyHighlighting(text) {
         finalHtml += processed + "\n";
     }
 
-    // Push error lines to the UI
+    // Call a function in your HTML to update the dots
     if (window.updateErrorDots) window.updateErrorDots(errorLines);
-    
+
     return finalHtml;
 }
 
@@ -47,7 +56,7 @@ function processSegmentsSync(segments) {
         if (!commandData) {
             // Instant cache check (No 'await' here!)
             commandData = commandCache[segmentLower];
-            
+
             if (commandData) {
                 processed += `<span class="hl-command">${escapeHtml(segment)}</span>`;
             } else {
@@ -97,7 +106,7 @@ function getHighlightClass(word, expected) {
     switch (expected.type) {
         case "target": 
             return /^(@[a-p|e|s|r|v]|@[a-p|e|s|r|v]\[.*\]|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
-        
+
         case "word":
             if (expected.options) {
                 if (expected.options.includes("*")) return "hl-item"; 
@@ -107,7 +116,7 @@ function getHighlightClass(word, expected) {
 
         case "item_id": 
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
-        
+
         case "int": 
             return /^([~^]-?\d*|-?\d+)$/.test(word) ? "hl-number" : "hl-error";
 
@@ -118,6 +127,3 @@ function getHighlightClass(word, expected) {
 function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
-
-// PRE-LOADER: Add common commands here so they are instant on page load
-['give', 'tp', 'execute', 'summon', 'fill', 'setblock'].forEach(fetchCommandGrammar);
