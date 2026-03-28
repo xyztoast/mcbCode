@@ -21,7 +21,6 @@ async function applyHighlighting(text) {
         let argCounter = 0;
 
         for (let segment of segments) {
-            // If it's just whitespace, append and skip
             if (segment.trim() === "") {
                 processedLine += segment;
                 continue;
@@ -29,16 +28,16 @@ async function applyHighlighting(text) {
 
             // The first word is the command
             if (!commandData) {
-                commandData = await fetchCommandGrammar(segment);
+                const cmdClean = segment.toLowerCase();
+                commandData = await fetchCommandGrammar(cmdClean);
+                
                 if (commandData) {
                     processedLine += `<span class="hl-command">${escapeHtml(segment)}</span>`;
                 } else {
-                    // Highlight as error if command JSON isn't found
                     processedLine += `<span class="hl-error">${escapeHtml(segment)}</span>`;
                 }
             } else {
-                // It's an argument. Check it against the JSON pattern
-                // Logic: commandData.pattern[0] is the first argument after the command name
+                // Check argument against JSON pattern
                 let expected = commandData.pattern[argCounter];
                 let cssClass = getHighlightClass(segment, expected);
                 
@@ -48,21 +47,21 @@ async function applyHighlighting(text) {
         }
         finalHtml += processedLine + "\n";
     }
-    // We add a zero-width space at the end to help with trailing newlines
     return finalHtml;
 }
 
 /**
- * Fetches your JSON file from the backend folder with Caching
+ * Fetches with Caching
  */
 async function fetchCommandGrammar(cmd) {
     if (commandCache[cmd]) return commandCache[cmd];
 
     try {
-        const response = await fetch(`backend/commands/${cmd}.json`);
+        // Use ./ to ensure relative pathing on GitHub Pages
+        const response = await fetch(`./backend/commands/${cmd}.json`);
         if (!response.ok) return null;
         const data = await response.json();
-        commandCache[cmd] = data; // Store in cache
+        commandCache[cmd] = data; 
         return data;
     } catch (e) {
         return null;
@@ -70,19 +69,46 @@ async function fetchCommandGrammar(cmd) {
 }
 
 /**
- * Decides which CSS class to use based on the grammar type
+ * Validates Bedrock Targets (@s, player names, selectors with brackets)
+ */
+function isValidTarget(word) {
+    // 1. Basic selectors: @p, @a, @r, @e, @s, @v, @initiator
+    const basicSelector = /^@(p|a|r|e|s|v|initiator)$/i;
+    
+    // 2. Complex selectors: @a[tag=test, c=1]
+    const complexSelector = /^@(p|a|r|e|s|v|initiator)\[.*\]$/i;
+    
+    // 3. Player names: 3-16 chars, alphanumeric and underscores
+    const playerName = /^[A-Za-z0-9_]{3,16}$/;
+
+    return basicSelector.test(word) || complexSelector.test(word) || playerName.test(word);
+}
+
+/**
+ * Decides which CSS class to use
  */
 function getHighlightClass(word, expected) {
-    // FORCE COLOR TEST: If the word is 'give', make it blue regardless of JSON
-    if (word.toLowerCase() === "give") return "hl-command";
-
     if (!expected) return ""; 
 
     switch (expected.type) {
-        case "target": return "hl-selector";
-        case "item_id": return "hl-item";
-        case "int": return "hl-number";
-        default: return "";
+        case "target": 
+            return isValidTarget(word) ? "hl-selector" : "hl-error";
+        
+        case "item_id": 
+            // Matches namespaced IDs like minecraft:stick or just stick
+            const itemRegex = /^([a-z0-9_]+:)?[a-z0-9_]+$/;
+            return itemRegex.test(word) ? "hl-item" : "hl-error";
+        
+        case "int": 
+            // Matches positive/negative integers
+            return /^-?\d+$/.test(word) ? "hl-number" : "hl-error";
+
+        case "json_component":
+            // Basic check for opening brace of a component string
+            return word.startsWith('{') ? "hl-item" : "hl-error";
+
+        default: 
+            return "";
     }
 }
 
