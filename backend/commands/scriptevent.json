@@ -1,0 +1,7 @@
+{
+  "command": "scriptevent",
+  "pattern": [
+    { "type": "word", "options": ["*"] },
+    { "type": "word", "options": ["*"] }
+  ]
+}
