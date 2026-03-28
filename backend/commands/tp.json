@@ -1,0 +1,9 @@
+{
+  "command": "tp",
+  "pattern": [
+    { "type": "target" },
+    { "type": "int" },
+    { "type": "int" },
+    { "type": "int" }
+  ]
+}
