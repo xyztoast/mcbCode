@@ -1,0 +1,6 @@
+{
+  "command": "say",
+  "pattern": [
+    { "type": "word", "options": ["*"] }
+  ]
+}
