@@ -181,6 +181,31 @@
   .delete { color: #ff4d4d; }
   h3 { font-family: mcfont; margin: 0; }
   g { color: #05ee93; }
+
+  /* The Dot in the Line Number Gutter */
+.line-number.has-error::before {
+    content: "●";
+    color: #ff4d4d;
+    position: absolute;
+    left: -15px;
+    font-size: 10px;
+}
+
+.hl-error:hover::after {
+    content: "Invalid syntax or missing JSON definition";
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 100;
+    border: 1px solid #ff4d4d;
+}
 </style>
 </head>
 <body>
