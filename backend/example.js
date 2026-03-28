@@ -1,23 +1,31 @@
+// Cache to store command JSONs
 const commandCache = {};
 
 /**
- * Main entry point with logic to handle "word" wildcards
+ * Main Entry Point - Now runs synchronously if data is cached
  */
 async function applyHighlighting(text) {
     const lines = text.split('\n');
     let finalHtml = "";
+
     for (let line of lines) {
         if (line.trim().startsWith('#')) {
             finalHtml += `<span class="hl-comment">${escapeHtml(line)}</span>\n`;
             continue;
         }
+
         const segments = line.split(/(\s+)/);
-        finalHtml += await processCommandSegments(segments) + "\n";
+        // We use a sync-first approach to avoid 'await' lag
+        finalHtml += processSegmentsSync(segments) + "\n";
     }
+
     return finalHtml;
 }
 
-async function processCommandSegments(segments) {
+/**
+ * The "Brain" - Processes segments instantly if cached
+ */
+function processSegmentsSync(segments) {
     let processed = "";
     let commandData = null;
     let argCounter = 0;
@@ -29,14 +37,24 @@ async function processCommandSegments(segments) {
             continue;
         }
 
+        const segmentLower = segment.toLowerCase();
+
         if (!commandData) {
-            commandData = await fetchCommandGrammar(segment.toLowerCase());
-            processed += `<span class="${commandData ? 'hl-command' : 'hl-error'}">${escapeHtml(segment)}</span>`;
+            // Instant cache check (No 'await' here!)
+            commandData = commandCache[segmentLower];
+            
+            if (commandData) {
+                processed += `<span class="hl-command">${escapeHtml(segment)}</span>`;
+            } else {
+                // If not in cache, start a background fetch for next time
+                fetchCommandGrammar(segmentLower); 
+                processed += `<span class="hl-error">${escapeHtml(segment)}</span>`;
+            }
         } else {
-            // Execute recursion
-            if (segment.toLowerCase() === "run" && commandData.command === "execute") {
+            // Execute Recursion
+            if (segmentLower === "run" && commandData.command === "execute") {
                 processed += `<span class="hl-command">run</span>`;
-                processed += await processCommandSegments(segments.slice(i + 1));
+                processed += processSegmentsSync(segments.slice(i + 1));
                 break; 
             }
 
@@ -49,17 +67,25 @@ async function processCommandSegments(segments) {
     return processed;
 }
 
+/**
+ * Background Fetcher - Populates the cache
+ */
 async function fetchCommandGrammar(cmd) {
-    if (commandCache[cmd]) return commandCache[cmd];
+    if (commandCache[cmd] || !cmd) return;
     try {
         const response = await fetch(`./backend/commands/${cmd}.json`);
-        if (!response.ok) return null;
-        const data = await response.json();
-        commandCache[cmd] = data; 
-        return data;
-    } catch (e) { return null; }
+        if (response.ok) {
+            const data = await response.json();
+            commandCache[cmd] = data;
+            // Trigger a re-render now that we have the data
+            if (typeof updateHighlighting === "function") updateHighlighting();
+        }
+    } catch (e) { /* Command doesn't exist */ }
 }
 
+/**
+ * Highlighting Logic
+ */
 function getHighlightClass(word, expected) {
     if (!expected) return ""; 
 
@@ -68,12 +94,9 @@ function getHighlightClass(word, expected) {
             return /^(@[a-p|e|s|r|v]|@[a-p|e|s|r|v]\[.*\]|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
         
         case "word":
-            // WILDCARD LOGIC: If options is ["*"], everything is valid.
-            if (expected.options && expected.options.includes("*")) {
-                return "hl-item"; 
-            }
-            if (expected.options && expected.options.includes(word.toLowerCase())) {
-                return "hl-command"; 
+            if (expected.options) {
+                if (expected.options.includes("*")) return "hl-item"; 
+                if (expected.options.includes(word.toLowerCase())) return "hl-command"; 
             }
             return "hl-error";
 
@@ -81,8 +104,7 @@ function getHighlightClass(word, expected) {
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
         
         case "int": 
-            const coordRegex = /^([~^]-?\d*|-?\d+)$/;
-            return coordRegex.test(word) ? "hl-number" : "hl-error";
+            return /^([~^]-?\d*|-?\d+)$/.test(word) ? "hl-number" : "hl-error";
 
         default: return "";
     }
@@ -91,3 +113,6 @@ function getHighlightClass(word, expected) {
 function escapeHtml(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
+
+// PRE-LOADER: Add common commands here so they are instant on page load
+['give', 'tp', 'execute', 'summon', 'fill', 'setblock'].forEach(fetchCommandGrammar);
