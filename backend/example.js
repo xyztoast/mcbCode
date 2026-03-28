@@ -73,18 +73,16 @@ async function fetchCommandGrammar(cmd) {
  * Decides which CSS class to use based on the grammar type
  */
 function getHighlightClass(word, expected) {
-    if (!expected) return ""; // Extra arguments with no rules
+    // FORCE COLOR TEST: If the word is 'give', make it blue regardless of JSON
+    if (word.toLowerCase() === "give") return "hl-command";
+
+    if (!expected) return ""; 
 
     switch (expected.type) {
-        case "target":
-            return /^(@[a-p|e|s|r]|[A-Za-z0-9_]{3,16})$/.test(word) ? "hl-selector" : "hl-error";
-        case "item_id":
-            // Checks for minecraft:item or just item_name
-            return /^[a-z0-9_]+:?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
-        case "int":
-            return /^-?\d+$/.test(word) ? "hl-number" : "hl-error";
-        default:
-            return "";
+        case "target": return "hl-selector";
+        case "item_id": return "hl-item";
+        case "int": return "hl-number";
+        default: return "";
     }
 }
 
