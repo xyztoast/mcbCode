@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
 
+<!-- highlight.js script here DO NOT TOUCH -->
+
 <link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/site.css">
 <!-- External Theme Link -->
 <link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/default.css">
+<link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/blue.css">
+<link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/neon.css">
+<link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/grayscale.css">
+<link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/soft.css">
 
 <meta charset="UTF-8">
 <link rel="icon" href="/icons/mcbcode.png">
@@ -156,11 +162,12 @@
   .sub-dropdown {
     display: none;
     flex-direction: column;
-    background-color: #323738;
-    margin-left: 10px;
-    border-radius: 5px;
-    padding: 5px 0;
-    font-size: 10px;
+    background-color: #212425;
+    font-size: 9px;
+  }
+
+  .sub-dropdown:hover {
+    background-color: #212425 !important;
   }
 
   #colorFormat:hover .sub-dropdown {
@@ -172,43 +179,35 @@
   h3 { font-family: mcfont; margin: 0; }
   g { color: #05ee93; }
 
-  /* The Dot in the Line Number Gutter */
-.line-number.has-error::before {
-    content: "●";
-    color: #ff4d4d;
-    position: absolute;
-    left: -15px;
-    font-size: 10px;
+
+.nav-item:hover .nav-dropdown {
+  display: block;
 }
 
-.hl-error:hover::after {
-    content: "Invalid syntax or missing JSON definition";
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 100;
-    border: 1px solid #ff4d4d;
-}
-.viewbeta {
-    font-size: 12px;
-    margin-left: 36px;
-    border-radius: 8px;
-    background-color: #0c0c0c;
-    padding: 8px 12px;
-    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+.has-submenu {
+  position: relative;
+  cursor: pointer;
+  border-radius: 0;
 }
 
-.viewbeta:hover {
-    color: #bebebe;
-    background-color: #262626;
+.has-submenu:hover {
 }
+
+.sub-dropdown {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 90%;
+  border: 1px solid #bebebe;
+  min-width: 120px;
+}
+
+.has-submenu:hover .sub-dropdown {
+  display: block;
+}
+
+
 
 </style>
 </head>
@@ -216,7 +215,6 @@
     <div class="top-thing" style="display: flex; align-items: center; height: 50px;">
         <a href="https://xyztoast.github.io/mcfunction" style="padding-left: 12px;"><img src="https://xyztoast.github.io/icons/mcbcode.png" alt="icon" style="width: 36px"></a>
         <h2 style="padding: 0px 12px;">mcb<g>Code</g></h2>
-        <a href="https://xyztoast.github.io/mcfunction/test-editor" style="text-decoration: none; color: #ffffff;"><p class="viewbeta">View Beta Site</p></a>
     </div>
 
     <div class="navi">
@@ -259,13 +257,22 @@
             </div>
           </div>
         </div>
-        <div class="nav-item">
-          <button>View</button>
-          <div class="nav-dropdown">
-            <div>Themes</div>
-            <div>Font size</div>
-          </div>
-        </div>
+<div class="nav-item">
+  <button>View</button>
+  <div class="nav-dropdown">
+    <div class="has-submenu">
+      Themes
+      <div class="sub-dropdown">
+        <div class="theme-btn" onclick="setTheme('default')">Default</div>
+        <div class="theme-btn" onclick="setTheme('neon')">Neon</div>
+        <div class="theme-btn" onclick="setTheme('blue')">Blue</div>
+        <div class="theme-btn" onclick="setTheme('soft')">Soft</div>
+        <div class="theme-btn" onclick="setTheme('grayscale')">Grayscale</div>
+      </div>
+    </div>
+    <div>Font size</div>
+  </div>
+</div>
       </div>
     </div>
 
@@ -296,27 +303,26 @@ function updateLineNumbers() {
     lineNumbers.textContent = lineContent;
 }
 
-// 2. Highlighting Logic
-let isHighlighting = false; // Add this line at the top of your script
+let isHighlighting = false;
 
 async function updateHighlighting() {
-    // If we are already busy highlighting, don't start a new one yet
+
     if (isHighlighting) return; 
 
     const text = codeArea.value;
 
-    // Set the gate to 'true' (Busy)
+
     isHighlighting = true;
 
-    // Use requestAnimationFrame so the browser stays smooth
+
     window.requestAnimationFrame(async () => {
         const highlighted = await applyHighlighting(text);
         highlightLayer.innerHTML = highlighted;
 
-        // We are done! Open the gate for the next update
+
         isHighlighting = false;
 
-        // Sync the scroll one last time
+
         highlightLayer.scrollTop = codeArea.scrollTop;
         highlightLayer.scrollLeft = codeArea.scrollLeft;
     });
