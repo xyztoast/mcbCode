@@ -1,0 +1,6 @@
+.hl-command { color: #569cd6; }
+.hl-selector { color: #dcdcaa; }
+.hl-item { color: #ce9178; }
+.hl-number { color: #b5cea8; }
+.hl-comment { color: #6a9955; }
+.hl-error { border-bottom: 2px wavy red; }
