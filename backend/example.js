@@ -2,7 +2,7 @@
 const commandCache = {};
 
 /**
- * Main Entry Point - Now runs synchronously if data is cached
+ * Main Entry Point
  */
 async function applyHighlighting(text) {
     const lines = text.split('\n');
@@ -12,22 +12,23 @@ async function applyHighlighting(text) {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         
-        // Handle empty lines
+        // 1. Handle Empty Lines
         if (line.trim() === "") {
             finalHtml += "\n";
             continue;
         }
 
-        // Handle comments
+        // 2. Handle Comments
         if (line.trim().startsWith('#')) {
             finalHtml += `<span class="hl-comment">${escapeHtml(line)}</span>\n`;
             continue;
         }
 
+        // 3. Process Command Logic
         const segments = line.split(/(\s+)/);
         const processed = processSegmentsSync(segments);
         
-        // Error tracking
+        // Track errors for the gutter dots
         if (processed.includes('hl-error')) {
             errorLines.push(i + 1);
         }
@@ -35,14 +36,16 @@ async function applyHighlighting(text) {
         finalHtml += processed + "\n";
     }
 
-    // Update the dots if the function exists
-    if (window.updateErrorDots) window.updateErrorDots(errorLines);
+    // Call the dot update in the HTML if it exists
+    if (typeof window.updateErrorDots === "function") {
+        window.updateErrorDots(errorLines);
+    }
 
     return finalHtml;
 }
 
 /**
- * The "Brain" - Processes segments instantly if cached
+ * The "Brain" - Processes segments
  */
 function processSegmentsSync(segments) {
     let processed = "";
@@ -51,6 +54,8 @@ function processSegmentsSync(segments) {
 
     for (let i = 0; i < segments.length; i++) {
         let segment = segments[i];
+        
+        // Preserve whitespace
         if (segment.trim() === "") {
             processed += segment;
             continue;
@@ -59,24 +64,26 @@ function processSegmentsSync(segments) {
         const segmentLower = segment.toLowerCase();
 
         if (!commandData) {
-            // Instant cache check (No 'await' here!)
+            // Check cache for the base command (e.g., "give")
             commandData = commandCache[segmentLower];
 
             if (commandData) {
                 processed += `<span class="hl-command">${escapeHtml(segment)}</span>`;
             } else {
-                // If not in cache, start a background fetch for next time
+                // Not in cache? Fetch for next time and mark as error for now
                 fetchCommandGrammar(segmentLower); 
                 processed += `<span class="hl-error">${escapeHtml(segment)}</span>`;
             }
         } else {
-            // Execute Recursion
+            // Handle Execute Recursion
             if (segmentLower === "run" && commandData.command === "execute") {
                 processed += `<span class="hl-command">run</span>`;
+                // Process the rest of the line as a new command
                 processed += processSegmentsSync(segments.slice(i + 1));
                 break; 
             }
 
+            // Highlight arguments based on the JSON pattern
             let expected = commandData.pattern[argCounter];
             let cssClass = getHighlightClass(segment, expected);
             processed += `<span class="${cssClass}">${escapeHtml(segment)}</span>`;
@@ -87,7 +94,7 @@ function processSegmentsSync(segments) {
 }
 
 /**
- * Background Fetcher - Populates the cache
+ * Background Fetcher
  */
 async function fetchCommandGrammar(cmd) {
     if (commandCache[cmd] || !cmd) return;
@@ -96,14 +103,14 @@ async function fetchCommandGrammar(cmd) {
         if (response.ok) {
             const data = await response.json();
             commandCache[cmd] = data;
-            // Trigger a re-render now that we have the data
+            // Re-run highlighting now that we have the data
             if (typeof updateHighlighting === "function") updateHighlighting();
         }
-    } catch (e) { /* Command doesn't exist */ }
+    } catch (e) { /* silent fail */ }
 }
 
 /**
- * Highlighting Logic
+ * Helper: Mapping JSON types to CSS classes
  */
 function getHighlightClass(word, expected) {
     if (!expected) return ""; 
@@ -111,20 +118,16 @@ function getHighlightClass(word, expected) {
     switch (expected.type) {
         case "target": 
             return /^(@[a-p|e|s|r|v]|@[a-p|e|s|r|v]\[.*\]|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
-
         case "word":
             if (expected.options) {
                 if (expected.options.includes("*")) return "hl-item"; 
                 if (expected.options.includes(word.toLowerCase())) return "hl-command"; 
             }
             return "hl-error";
-
         case "item_id": 
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
-
         case "int": 
             return /^([~^]-?\d*|-?\d+)$/.test(word) ? "hl-number" : "hl-error";
-
         default: return "";
     }
 }
