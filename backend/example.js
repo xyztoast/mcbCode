@@ -7,17 +7,28 @@ const commandCache = {};
 async function applyHighlighting(text) {
     const lines = text.split('\n');
     let finalHtml = "";
+    const errorLines = []; // Track lines with errors
 
-    for (let line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
         if (line.trim().startsWith('#')) {
             finalHtml += `<span class="hl-comment">${escapeHtml(line)}</span>\n`;
             continue;
         }
 
         const segments = line.split(/(\s+)/);
-        // We use a sync-first approach to avoid 'await' lag
-        finalHtml += processSegmentsSync(segments) + "\n";
+        const processed = processSegmentsSync(segments);
+        
+        // If the processed HTML contains an error class, mark this line
+        if (processed.includes('hl-error')) {
+            errorLines.push(i + 1);
+        }
+        
+        finalHtml += processed + "\n";
     }
+
+    // Call a function in your HTML to update the dots
+    if (window.updateErrorDots) window.updateErrorDots(errorLines);
 
     return finalHtml;
 }
