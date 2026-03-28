@@ -331,7 +331,22 @@ window.addEventListener('DOMContentLoaded', () => {
     updateHighlighting();
 });
 
-
+codeArea.addEventListener('keydown', (e) => {
+    const pairs = { '(': ')', '{': '}', '[': ']', '"': '"' };
+    
+    if (pairs[e.key]) {
+        e.preventDefault();
+        const start = codeArea.selectionStart;
+        const end = codeArea.selectionEnd;
+        const val = codeArea.value;
+        
+        // Insert the pair and move the cursor in the middle
+        codeArea.value = val.substring(0, start) + e.key + pairs[e.key] + val.substring(end);
+        codeArea.setSelectionRange(start + 1, start + 1);
+        
+        updateHighlighting();
+    }
+});
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
