@@ -1,0 +1,6 @@
+{
+  "command": "title",
+  "pattern": [
+    { "type": "word", "options": ["title", "subtitle", "actionbar"] }
+  ]
+}
