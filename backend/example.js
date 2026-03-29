@@ -139,30 +139,31 @@ function escapeHtml(text) {
 /* --- THEME SWITCHING LOGIC --- */
 
 function setTheme(themeName) {
-    // List of all your themes to ensure only one is active at a time
-    const themes = ['default', 'neon', 'blue', 'soft', 'grayscale'];
-    
-    // Remove all theme classes from body
-    themes.forEach(t => document.body.classList.remove(`theme-${t}`));
-    
-    // Add the selected theme class
-    document.body.classList.add(`theme-${themeName}`);
-    
-    // Save selection
-    localStorage.setItem('editor-theme', themeName);
+    const themeLink = document.getElementById('theme-link');
+    if (themeLink) {
+        // We use a relative path since the files are in your repo
+        // This builds the path: theme/editor/[name].css
+        const themeUrl = `theme/editor/${themeName.toLowerCase()}.css`;
+        
+        themeLink.href = themeUrl;
+        localStorage.setItem('selected-editor-theme', themeName.toLowerCase());
+        
+        console.log("Switched theme to:", themeUrl);
+    }
 }
 
-// Initializing the theme on load
 window.addEventListener('DOMContentLoaded', () => {
-    const savedTheme = localStorage.getItem('editor-theme') || 'default';
+    // 1. Load saved theme
+    const savedTheme = localStorage.getItem('selected-editor-theme') || 'default';
     setTheme(savedTheme);
 
-    // Attach click listeners to your theme divs
-    document.querySelectorAll('.sub-dropdown div').forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Grabs the text (e.g., "Neon") and makes it "neon"
-            const theme = this.textContent.trim().toLowerCase();
-            setTheme(theme);
+    // 2. Attach click events to your dropdown divs
+    const themeButtons = document.querySelectorAll('.sub-dropdown div');
+    
+    themeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const themeName = btn.textContent.trim().toLowerCase();
+            setTheme(themeName);
         });
     });
 });
