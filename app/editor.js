@@ -1,4 +1,9 @@
-<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/app/sw.js').then(() => {
+    console.log('sw registered');
+  }).catch(console.error);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const codeArea = document.getElementById('codeArea');
 
@@ -48,4 +53,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.addEventListener('dragover', e => e.preventDefault());
 });
-</script>
