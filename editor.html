@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="theme/site.css">
 <!-- External Theme Link -->
 <link id="theme-link" rel="stylesheet" href="theme/editor/default.css">
-
 <meta charset="UTF-8">
 <link rel="icon" href="/icons/mcbcode.png">
 <title>mcbCode editor</title>
@@ -491,8 +490,16 @@ document.getElementById('exportCode').addEventListener('click', () => {
 
 
 
+<script>
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/app/sw.js')
+    .then(() => console.log('sw registered'))
+    .catch(console.error);
+}
+</script>
 
 
+  
 
   
   <script data-goatcounter="https://idktoast.goatcounter.com/count"
