@@ -204,7 +204,6 @@
 }
 
 
-
 </style>
 </head>
 <body>
@@ -267,7 +266,13 @@
         <div class="theme-btn" onclick="setTheme('solid')">Solid</div>
       </div>
     </div>
-    <div>Font size</div>
+    <div class="has-submenu">
+      Font Size
+      <div class="sub-dropdown">
+        <input type="range" id="fontsize" min="6" max="24" value="12">
+<span id="fontsize-value">12px</span>
+      </div>
+    </div>
   </div>
 </div>
       </div>
@@ -417,6 +422,8 @@ codeArea.addEventListener('keydown', (e) => {
     // Initial Run
     updateLineNumbers();
     updateHighlighting();
+
+    // font size changer
   </script>
 </body>
 </html>
