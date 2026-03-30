@@ -1,10 +1,10 @@
-const CACHE_NAME = 'mcfunction-editor-v1';
+const CACHE_NAME = 'mcbCode';
 const FILES_TO_CACHE = [
-  './',
-  './editor.html',
-  './site.css',
-  './manifest.json',
-  './app.js',
+  '/',
+  '/editor.html',
+  '/theme/site.css',
+  '/app/manifest.json',
+  '/app/index.html',
   './icon-512.png'
 ];
 
