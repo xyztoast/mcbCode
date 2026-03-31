@@ -111,16 +111,16 @@
     z-index: 2;
     background: transparent !important;
     color: transparent !important; 
-    caret-color: #fff !important; /* Keep typing cursor visible */
+    caret-color: #fff !important; 
     resize: none;
   }
 
-  /* The visual highlighting layer (Behind the textarea) */
+
   .highlight-layer {
     z-index: 1;
     background-color: #0c0c0c;
     color: #f0f0f0;
-    pointer-events: none; /* Let clicks pass through to textarea */
+    pointer-events: none; 
   }
 
   .nav-item {
@@ -144,6 +144,7 @@
   .nav-dropdown div {
     padding: 6px 12px;
     cursor: pointer;
+    font-size: 12px;
   }
 
   .nav-dropdown div:hover {
@@ -342,6 +343,12 @@ textarea.addEventListener('input', adjustWidth);
     </div>
   </div>
 </div>
+        <div class="nav-item">
+          <button>Help</button>
+          <div class="nav-dropdown">
+            <a href="https://wiki.bedrock.dev" style="text-decoration: none; color: #ffffff"><div>Open <g>wiki.bedrock.dev</g></div></a>
+          </div>
+        </div>
       </div>
     </div>
 
