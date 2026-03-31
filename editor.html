@@ -232,6 +232,17 @@
   border-top-right-radius: 12px;
 }
 
+.copyshortcut {
+  transition: background-color 0.2s ease-in-out;
+  border-radius: 12px;
+  background-color: #1f1f1f;
+  padding: 6px 6px; margin-left: 8px;
+}
+
+.copyshortcut:hover {
+  background-color: #454545;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -241,6 +252,7 @@
         <div class="filename-txt">Filename:</div>
         <textarea id="autoWidth" class="file-name"></textarea>
         <div class="filename-mcf">.mcfunction</div>
+        <div class="copyshortcut" id="copyCode"><img style="width: 16px; height: 16px" src="https://xyztoast.github.io/mcfunction/img/copy.png"></div>
     </div>
 <script>
 const textarea = document.getElementById('autoWidth');
@@ -268,8 +280,8 @@ textarea.addEventListener('input', adjustWidth);
         <div class="nav-item">
           <button>File</button>
           <div class="nav-dropdown">
-            <div id="exportCode">export as .mcfunction</div>
-            <div id="copyCode">copy code</div>
+            <div id="copyCode">Copy Code</div>
+            <div id="exportCode">Export As .mcfunction</div>
           </div>
         </div>
         <div class="nav-item">
