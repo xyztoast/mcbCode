@@ -7,7 +7,7 @@
     { "type": "int" },
     { "type": "int" },
     { "type": "int" },
-    { "type": "int", "required": false },
+    { "type": "word", "required": true, "options": ["*"] },
     { "type": "json_component", "required": false }
   ]
 }
