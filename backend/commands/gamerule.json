@@ -1,6 +1,7 @@
 {
   "command": "gamerule",
   "pattern": [
-    { "type": "word", "options": "*" }
+    { "type": "word", "options": ["*"] },
+    { "type": "word", "required": "false", "options": ["true", "false"]
   ]
 }
