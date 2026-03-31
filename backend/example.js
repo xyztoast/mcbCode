@@ -1,17 +1,10 @@
 // Cache to store command JSONs
 const commandCache = {};
-// Cache for § color codes
-const colorCodes = {};
 
 /**
  * Main Entry Point
  */
 async function applyHighlighting(text) {
-    // Initial fetch for color codes if not loaded
-    if (Object.keys(colorCodes).length === 0) {
-        fetchColorCodes();
-    }
-
     const lines = text.split('\n');
     let finalHtml = "";
     const errorLines = []; 
@@ -60,9 +53,6 @@ function processSegmentsSync(segments) {
     let argCounter = 0;
     let restOfLineMode = false;
     let restOfLineClass = "";
-    
-    // NEW: Color State
-    let activeColor = null;
 
     for (let i = 0; i < segments.length; i++) {
         let segment = segments[i];
@@ -71,31 +61,6 @@ function processSegmentsSync(segments) {
         if (segment.trim() === "") {
             processed += segment;
             continue;
-        }
-
-        // § COLOR LOGIC: Check if segment contains or starts a color code
-        if (segment.includes('§')) {
-            const parts = segment.split(/(§[0-9a-f-r])/i);
-            let colorSegmentHtml = "";
-            
-            for (let part of parts) {
-                if (/§[0-9a-f]/i.test(part)) {
-                    const code = part.charAt(1).toLowerCase();
-                    activeColor = colorCodes[code] || null;
-                    colorSegmentHtml += `<span class="hl-code">${part}</span>`;
-                } else if (/§r/i.test(part)) {
-                    activeColor = null;
-                    colorSegmentHtml += `<span class="hl-code">${part}</span>`;
-                } else {
-                    const style = activeColor ? `style="color: ${activeColor}"` : "";
-                    colorSegmentHtml += `<span ${style}>${escapeHtml(part)}</span>`;
-                    
-                    // Stop coloring if we hit a closing quote
-                    if (part.includes('"') || part.includes("'")) activeColor = null;
-                }
-            }
-            processed += colorSegmentHtml;
-            continue; 
         }
 
         const segmentLower = segment.toLowerCase();
@@ -123,15 +88,13 @@ function processSegmentsSync(segments) {
             // If we hit a restOfLine trigger previously, keep using that class
             if (restOfLineMode) {
                 processed += `<span class="${restOfLineClass}">${escapeHtml(segment)}</span>`;
-                const style = activeColor ? `style="color: ${activeColor}"` : "";
-                processed += `<span class="${restOfLineClass}" ${style}>${escapeHtml(segment)}</span>`;
                 continue;
             }
 
             // Highlight arguments based on the JSON pattern
             let expected = commandData.pattern[argCounter];
             let cssClass = getHighlightClass(segment, expected);
-
+            
             // Check for the new restOfLine state
             if (expected && expected.restOfLine === "true") {
                 restOfLineMode = true;
@@ -139,8 +102,6 @@ function processSegmentsSync(segments) {
             }
 
             processed += `<span class="${cssClass}">${escapeHtml(segment)}</span>`;
-            const style = activeColor ? `style="color: ${activeColor}"` : "";
-            processed += `<span class="${cssClass}" ${style}>${escapeHtml(segment)}</span>`;
             argCounter++;
         }
     }
@@ -149,18 +110,7 @@ function processSegmentsSync(segments) {
 
 /**
  * Background Fetcher
- * Fetchers
  */
-async function fetchColorCodes() {
-    try {
-        const response = await fetch(`./colorcodes.json`);
-        if (response.ok) {
-            const data = await response.json();
-            Object.assign(colorCodes, data);
-        }
-    } catch (e) { /* silent fail */ }
-}
-
 async function fetchCommandGrammar(cmd) {
     if (commandCache[cmd] || !cmd) return;
     try {
@@ -185,6 +135,7 @@ function getHighlightClass(word, expected) {
             return /^(@[a-p|e|s|r|v]|@[a-p|e|s|r|v]\[.*\]|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
         case "word":
             if (expected.options) {
+                if (expected.options.includes("*")) return "hl-item"; 
                 if (expected.options.includes(word.toLowerCase())) return "hl-command"; 
             }
             // If it's a restOfLine word but not in options, we still treat it as hl-item/command rather than error
@@ -210,10 +161,10 @@ function setTheme(themeName) {
         // We use a relative path since the files are in your repo
         // This builds the path: theme/editor/[name].css
         const themeUrl = `theme/editor/${themeName.toLowerCase()}.css`;
-        
+
         themeLink.href = themeUrl;
         localStorage.setItem('selected-editor-theme', themeName.toLowerCase());
-        
+
         console.log("Switched theme to:", themeUrl);
     }
 }
@@ -225,7 +176,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // 2. Attach click events to your dropdown divs
     const themeButtons = document.querySelectorAll('.sub-dropdown div');
-    
+
     themeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
             const themeName = btn.textContent.trim().toLowerCase();
