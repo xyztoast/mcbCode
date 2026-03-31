@@ -1,6 +1,6 @@
 {
   "command": "say",
   "pattern": [
-    { "type": "word", "options": ["*"] }
+    { "type": "word", "options": ["*"], "restOfLine":"true"  }
   ]
 }
