@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
 
-<!-- highlight.js script here DO NOT TOUCH -->
+<link rel="manifest" href="/app/manifest.json">
 
 <link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/site.css">
 <!-- External Theme Link -->
-<link rel="stylesheet" href="https://xyztoast.github.io/mcfunction/theme/editor/default.css">
-
+<link id="theme-link" rel="stylesheet" href="https://xyztoast.github.io/mcfunciton/theme/editor/default.css">
 <meta charset="UTF-8">
 <link rel="icon" href="/icons/mcbcode.png">
 <title>mcbCode editor</title>
@@ -112,16 +111,16 @@
     z-index: 2;
     background: transparent !important;
     color: transparent !important; 
-    caret-color: #fff !important; /* Keep typing cursor visible */
+    caret-color: #fff !important; 
     resize: none;
   }
 
-  /* The visual highlighting layer (Behind the textarea) */
+
   .highlight-layer {
     z-index: 1;
     background-color: #0c0c0c;
     color: #f0f0f0;
-    pointer-events: none; /* Let clicks pass through to textarea */
+    pointer-events: none; 
   }
 
   .nav-item {
@@ -145,6 +144,7 @@
   .nav-dropdown div {
     padding: 6px 12px;
     cursor: pointer;
+    font-size: 12px;
   }
 
   .nav-dropdown div:hover {
@@ -158,11 +158,12 @@
   .sub-dropdown {
     display: none;
     flex-direction: column;
-    background-color: #323738;
-    margin-left: 10px;
-    border-radius: 5px;
-    padding: 5px 0;
-    font-size: 10px;
+    background-color: #212425;
+    font-size: 9px;
+  }
+
+  .sub-dropdown:hover {
+    background-color: #212425 !important;
   }
 
   #colorFormat:hover .sub-dropdown {
@@ -174,29 +175,74 @@
   h3 { font-family: mcfont; margin: 0; }
   g { color: #05ee93; }
 
-  /* The Dot in the Line Number Gutter */
-.line-number.has-error::before {
-    content: "●";
-    color: #ff4d4d;
-    position: absolute;
-    left: -15px;
-    font-size: 10px;
+
+.nav-item:hover .nav-dropdown {
+  display: block;
 }
 
-.hl-error:hover::after {
-    content: "Invalid syntax or missing JSON definition";
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    z-index: 100;
-    border: 1px solid #ff4d4d;
+
+.has-submenu {
+  position: relative;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.has-submenu:hover {
+}
+
+.sub-dropdown {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 90%;
+  border: 1px solid #bebebe;
+  min-width: 120px;
+}
+
+.has-submenu:hover .sub-dropdown {
+  display: block;
+}
+
+.file-name {
+  background-color: #0c0c0c;
+  color: #ffffff;
+  white-space: nowrap;
+  height: 18px;
+  font-size: 16px;
+  outline: none;
+  border: none;
+  padding: 6px 2px;
+  resize: none;
+  min-width: 10%;
+  line-height: 18px;
+  overflow-y: hidden
+}
+
+.filename-txt {
+  background-color: #454545;
+  padding: 6px 6px;
+  padding-right: 12px;
+  border-bottom-left-radius: 12px;
+  border-top-left-radius: 12px;
+}
+
+.filename-mcf {
+  background-color: #1f1f1f;
+  padding: 6px 6px;
+  border-bottom-right-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.copyshortcut {
+  transition: background-color 0.2s ease-in-out;
+  border-radius: 12px;
+  background-color: #1f1f1f;
+  padding: 6px 6px; margin-left: 8px;
+}
+
+.copyshortcut:hover {
+  background-color: #454545;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -204,53 +250,103 @@
     <div class="top-thing" style="display: flex; align-items: center; height: 50px;">
         <a href="https://xyztoast.github.io/mcfunction" style="padding-left: 12px;"><img src="https://xyztoast.github.io/icons/mcbcode.png" alt="icon" style="width: 36px"></a>
         <h2 style="padding: 0px 12px;">mcb<g>Code</g></h2>
+        <div class="filename-txt">Filename:</div>
+        <textarea id="autoWidth" class="file-name" maxlength="72"></textarea>
+        <div class="filename-mcf">.mcfunction</div>
+        <div class="copyshortcut" id="copyCode"><img style="width: 16px; height: 16px" src="https://xyztoast.github.io/mcfunction/img/copy.png"></div>
     </div>
+<script>
+const textarea = document.getElementById('autoWidth');
 
+// helper span for measuring text width
+const measurer = document.createElement('span');
+measurer.style.visibility = 'hidden';
+measurer.style.whiteSpace = 'pre';
+measurer.style.font = window.getComputedStyle(textarea).font;
+document.body.appendChild(measurer);
+
+function adjustWidth() {
+  measurer.textContent = textarea.value || textarea.placeholder;
+  textarea.style.width = measurer.offsetWidth + 10 + 'px'; // +10 for padding
+}
+
+// initial size
+adjustWidth();
+
+// update as user types
+textarea.addEventListener('input', adjustWidth);
+</script>
     <div class="navi">
       <div class="nav-left">
         <div class="nav-item">
           <button>File</button>
           <div class="nav-dropdown">
-            <div id="exportCode">export as .mcfunction</div>
-            <div id="copyCode">copy code</div>
+            <div id="copyCode">Copy Code</div>
+            <div id="exportCode">Export As .mcfunction</div>
           </div>
         </div>
         <div class="nav-item">
           <button>Edit</button>
           <div class="nav-dropdown">
-            <div id="deleteCode" class="delete">delete code</div>
-            <div id="colorFormat">color format
+            <div id="colorFormat">Color Format
               <div class="sub-dropdown" id="colorMenu">
-                <div data-code="§0">§0 - black</div>
-                <div data-code="§1">§1 - dark blue</div>
-                <div data-code="§2">§2 - dark green</div>
-                <div data-code="§3">§3 - dark aqua</div>
-                <div data-code="§4">§4 - dark red</div>
-                <div data-code="§5">§5 - dark purple</div>
-                <div data-code="§6">§6 - gold</div>
-                <div data-code="§7">§7 - gray</div>
-                <div data-code="§8">§8 - dark gray</div>
-                <div data-code="§9">§9 - blue</div>
-                <div data-code="§a">§a - green</div>
-                <div data-code="§b">§b - aqua</div>
-                <div data-code="§c">§c - red</div>
-                <div data-code="§d">§d - light purple</div>
-                <div data-code="§e">§e - yellow</div>
-                <div data-code="§f">§f - white</div>
-                <div data-code="§g">§g - gold</div>
-                <div data-code="§k">§k - obfuscated</div>
-                <div data-code="§l">§l - bold</div>
-                <div data-code="§o">§o - italic</div>
-                <div data-code="§r">§r - reset</div>
+                <div data-code="§0">§0 - Black</div>
+                <div data-code="§1">§1 - Dark Blue</div>
+                <div data-code="§2">§2 - Dark Green</div>
+                <div data-code="§3">§3 - Dark Aqua</div>
+                <div data-code="§4">§4 - Dark Red</div>
+                <div data-code="§5">§5 - Dark Purple</div>
+                <div data-code="§6">§6 - Gold</div>
+                <div data-code="§7">§7 - Gray</div>
+                <div data-code="§8">§8 - Dark Gray</div>
+                <div data-code="§9">§9 - Blue</div>
+                <div data-code="§a">§a - Green</div>
+                <div data-code="§b">§b - Aqua</div>
+                <div data-code="§c">§c - Red</div>
+                <div data-code="§d">§d - Light Purple</div>
+                <div data-code="§e">§e - Yellow</div>
+                <div data-code="§f">§f - White</div>
+                <div data-code="§g">§g - Gold</div>
+                <div data-code="§k">§k - Obfuscated</div>
+                <div data-code="§l">§l - Bold</div>
+                <div data-code="§o">§o - Italic</div>
+                <div data-code="§r">§r - Reset</div>
               </div>
             </div>
+           <div id="deleteCode" class="delete">Delete Code</div>
           </div>
         </div>
+<div class="nav-item">
+  <button>View</button>
+  <div class="nav-dropdown">
+    <div class="has-submenu">
+      Themes
+      <div class="sub-dropdown">
+        <div class="theme-btn" onclick="setTheme('default')">Default</div>
+        <div class="theme-btn" onclick="setTheme('neon')">Neon</div>
+        <div class="theme-btn" onclick="setTheme('blue')">Blue</div>
+        <div class="theme-btn" onclick="setTheme('soft')">Soft</div>
+        <div class="theme-btn" onclick="setTheme('grayscale')">Grayscale</div>
+        <div class="theme-btn" onclick="setTheme('solid')">Solid</div>
+      </div>
+    </div>
+    <div class="has-submenu">
+      Keyboard Shortcuts
+      <div class="sub-dropdown">
+        <h4>Ctrl+A - Select All</h4>
+        <h4>Ctrl+C - Copy</h4>
+        <h4>Ctrl+V - Paste</h4>
+        <h4>Ctrl+X - Cut</h4>
+        <h4>Ctrl+S - Download File</h4>
+        <h4>Ctrl+E - Edit Details</h4>
+      </div>
+    </div>
+  </div>
+</div>
         <div class="nav-item">
-          <button>View</button>
+          <button>Help</button>
           <div class="nav-dropdown">
-            <div>Themes</div>
-            <div>Font size</div>
+            <a href="https://wiki.bedrock.dev/commands/intro-to-command-blocks" style="text-decoration: none; color: #ffffff"><div>Open <g>wiki.bedrock.dev</g></div></a>
           </div>
         </div>
       </div>
@@ -260,7 +356,12 @@
       <pre id="lineNumbers" class="line-numbers">1</pre>
       <div class="code-container">
         <div class="highlight-layer" id="highlightLayer"></div>
-        <textarea class="code-area" id="codeArea" spellcheck="false" placeholder="mcbCode made by idktoast">give @a stick</textarea>
+        <textarea class="code-area" id="codeArea" spellcheck="false" placeholder="mcbCode made by idktoast"># welcome to mcbCode. 
+title @a actionbar §aWelcome to my world!
+tp @a 0 319 0
+give @a oak_log 32
+give @r stone_sword
+</textarea>
       </div>
     </div>
 
@@ -283,27 +384,26 @@ function updateLineNumbers() {
     lineNumbers.textContent = lineContent;
 }
 
-// 2. Highlighting Logic
-let isHighlighting = false; // Add this line at the top of your script
+let isHighlighting = false;
 
 async function updateHighlighting() {
-    // If we are already busy highlighting, don't start a new one yet
+
     if (isHighlighting) return; 
 
     const text = codeArea.value;
 
-    // Set the gate to 'true' (Busy)
+
     isHighlighting = true;
 
-    // Use requestAnimationFrame so the browser stays smooth
+
     window.requestAnimationFrame(async () => {
         const highlighted = await applyHighlighting(text);
         highlightLayer.innerHTML = highlighted;
 
-        // We are done! Open the gate for the next update
+
         isHighlighting = false;
 
-        // Sync the scroll one last time
+
         highlightLayer.scrollTop = codeArea.scrollTop;
         highlightLayer.scrollLeft = codeArea.scrollLeft;
     });
@@ -311,7 +411,7 @@ async function updateHighlighting() {
 
 // 3. Event Listeners
 codeArea.addEventListener('input', () => {
-    updateLineNumbers(); // Run immediately for line numbers
+    updateLineNumbers();
     clearTimeout(highlightTimeout);
     highlightTimeout = setTimeout(updateHighlighting, 10); 
 });
@@ -324,7 +424,7 @@ codeArea.addEventListener('scroll', () => {
     });
 });
 
-// 4. INITIAL RUN (Fixes the "Black Text on Load" issue)
+// 4. INITIAL RUN
 window.addEventListener('DOMContentLoaded', () => {
     updateLineNumbers();
     updateHighlighting();
@@ -340,7 +440,7 @@ codeArea.addEventListener('keydown', (e) => {
         const end = codeArea.selectionEnd;
         const val = codeArea.value;
         
-        // Insert the pair and move the cursor in the middle
+       
         codeArea.value = val.substring(0, start) + e.key + pairs[e.key] + val.substring(end);
         codeArea.setSelectionRange(start + 1, start + 1);
         
@@ -352,7 +452,7 @@ codeArea.addEventListener('keydown', (e) => {
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
-    // 5. Original Functionality (Copy, Delete, Export)
+    // 5. Original Functionality
     document.getElementById('copyCode').addEventListener('click', () => {
       const text = codeArea.value;
       if (!text) return;
@@ -373,17 +473,23 @@ codeArea.addEventListener('keydown', (e) => {
       updateHighlighting();
     });
 
-    document.getElementById('exportCode').addEventListener('click', () => {
-      if(!codeArea.value) return;
-      let fileName = prompt('Enter file name') || "script";
-      fileName = fileName.replace(/[^a-z0-9_\-]/gi, '_') + '-idktoast.mcfunction';
-      const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(a.href);
-    });
+document.getElementById('exportCode').addEventListener('click', () => {
+  const codeArea = document.getElementById('codeArea'); // assuming your textarea with code has this id
+  const fileNameArea = document.getElementById('autoWidth'); 
+
+  if (!codeArea.value) return;
+
+  // get filename from textarea, fallback to "script"
+  let fileName = (fileNameArea.value || 'untitled')
+    .replace(/[^a-z0-9_\-]/gi, '_') + '.mcfunction';
+
+  const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
 
     const colorMenu = document.getElementById('colorMenu');
     colorMenu.querySelectorAll('div').forEach(item => {
@@ -401,6 +507,26 @@ codeArea.addEventListener('keydown', (e) => {
     // Initial Run
     updateLineNumbers();
     updateHighlighting();
+
+
   </script>
+  <script src="https://xyztoast.github.io/mcfunction/app/editor.js"></script>
+
+
+
+<script>
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/app/sw.js')
+    .then(() => console.log('sw registered'))
+    .catch(console.error);
+}
+</script>
+
+
+  
+
+  
+  <script data-goatcounter="https://idktoast.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
