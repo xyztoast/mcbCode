@@ -4,6 +4,9 @@ https://xyztoast.github.io/mcfunction
 
 ## checklist (probably out of date)
 [x] editor syntax
+
 [x] some tools
+
 [x] index page (kinda)
+
 [ ] all commands done (better list [here](https://xyztoast.github.io/mcfunction/backend/commands/))
