@@ -13,30 +13,44 @@
       font-weight: normal;
       font-style: normal;
     }
-    * {
-        font-family: 'mcfont':
-    }
-    h1 {
-        font-family: 'mcfontb';
-    }
-    h2 {
-        font-family: 'mcfontb';
-    }
-    h3 {
-        font-family: 'mcfontb';
-    }
-    h4 {
-        font-family: 'mcfont';
-    }
-    p {
-        font-family: 'mcfont';
-    }
-    input {
-        font-family: 'mcfont';
-    }
-    button {
-        font-family: 'mcfont';
-    }
-    textarea {
-        font-family: 'mcfont';
-    }
+
+* {
+  font-family: 'mcfont':
+}
+
+body::selection {     
+  background: #05ee9380;
+}
+
+g {
+  color: #05ee93;
+}
+
+c {
+  color: #e7007b;
+}
+
+h1 {
+  font-family: 'mcfontb';
+}
+h2 {
+  font-family: 'mcfontb';
+}
+h3 {
+  font-family: 'mcfontb';
+}
+h4 {
+  font-family: 'mcfont';
+}
+p {
+  font-family: 'mcfont';
+}
+input {
+  font-family: 'mcfont';
+}
+button {
+  font-family: 'mcfont';
+}
+textarea {
+  font-family: 'mcfont';
+}
