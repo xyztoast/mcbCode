@@ -1,0 +1,69 @@
+{
+  "command": "tickingarea",
+  "overloads": [
+    {
+      "comment": "tickingarea add circle <center: x y z> <radius: int> [name: string] [preload: Boolean]",
+      "pattern": [
+        { "type": "word", "options": ["add"], "required": true },
+        { "type": "word", "options": ["circle"], "required": true },
+        { "type": "int" }, { "type": "int" }, { "type": "int" },
+        { "type": "int" },
+        { "type": "word", "options": ["*"], "required": false },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    },
+    {
+      "comment": "tickingarea add <from: x y z> <to: x y z> [name: string] [preload: Boolean]",
+      "pattern": [
+        { "type": "word", "options": ["add"], "required": true },
+        { "type": "int" }, { "type": "int" }, { "type": "int" },
+        { "type": "int" }, { "type": "int" }, { "type": "int" },
+        { "type": "word", "options": ["*"], "required": false },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    },
+    {
+      "comment": "tickingarea remove <name: string>",
+      "pattern": [
+        { "type": "word", "options": ["remove"], "required": true },
+        { "type": "word", "options": ["*"], "required": true }
+      ]
+    },
+    {
+      "comment": "tickingarea remove <position: x y z>",
+      "pattern": [
+        { "type": "word", "options": ["remove"], "required": true },
+        { "type": "int" }, { "type": "int" }, { "type": "int" }
+      ]
+    },
+    {
+      "comment": "tickingarea remove_all",
+      "pattern": [
+        { "type": "word", "options": ["remove_all"], "required": true }
+      ]
+    },
+    {
+      "comment": "tickingarea list [all-dimensions: AllDimensions]",
+      "pattern": [
+        { "type": "word", "options": ["list"], "required": true },
+        { "type": "word", "options": ["*"], "required": false }
+      ]
+    },
+    {
+      "comment": "tickingarea preload <name: string> [preload: Boolean]",
+      "pattern": [
+        { "type": "word", "options": ["preload"], "required": true },
+        { "type": "word", "options": ["*"], "required": true },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    },
+    {
+      "comment": "tickingarea preload <position: x y z> [preload: Boolean]",
+      "pattern": [
+        { "type": "word", "options": ["preload"], "required": true },
+        { "type": "int" }, { "type": "int" }, { "type": "int" },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    }
+  ]
+}
