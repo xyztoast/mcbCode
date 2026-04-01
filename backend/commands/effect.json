@@ -2,6 +2,9 @@
   "command": "effect",
   "pattern": [
     { "type": "word", "options": ["*"] },
-    { "type": "word", "options": ["*"] }
+    { "type": "word", "options": ["*"] },
+    { "type": "int", "required": false },
+    { "type": "int", "required": false },
+    { "type": "word", "options": ["true", "false"], "required": false }
   ]
 }
