@@ -135,7 +135,7 @@ function getHighlightClass(word, expected) {
         case "word":
             if (expected.options) {
                 if (expected.options.includes("*")) return "hl-item"; 
-                if (expected.options.includes(word.toLowerCase())) return "hl-command"; 
+                if (expected.options.includes(word.toLowerCase())) return "hl-word"; 
             }
             if (expected.restOfLine === "true") return "hl-item";
             return "hl-error";
