@@ -4,3 +4,4 @@
 .hl-number { color: #ffa500; }
 .hl-comment { color: #8a8a8a; font-style: italic; }
 .hl-error { color: #ff0000 !important; text-decoration: underline wavy #ff0000; cursor: help; }
+.hl-word { color: #ffffff; }
