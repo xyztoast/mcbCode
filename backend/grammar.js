@@ -86,7 +86,6 @@ function processSegmentsSync(segments) {
                 bestClass = getHighlightClass(segment, matchedExpected);
             } else {
                 // No patterns matched. The user typed an error.
-                // We leave activePatterns alone so if they backspace and fix it, it can pick back up.
                 bestClass = "hl-error";
             }
 
@@ -98,6 +97,11 @@ function processSegmentsSync(segments) {
 
             processed += `<span class="${bestClass}">${escapeHtml(segment)}</span>`;
             argCounter++;
+
+            // --- THE 3 LINES FOR CHAINING ---
+            if (activePatterns.length > 0 && argCounter >= activePatterns[0].length && !restOfLineMode) {
+                argCounter = 0; 
+            }
         }
     }
     return processed;
@@ -133,14 +137,13 @@ function getHighlightClass(word, expected) {
                 if (expected.options.includes("*")) return "hl-item"; 
                 if (expected.options.includes(word.toLowerCase())) return "hl-command"; 
             }
-            // If it's a restOfLine word but not in options, we still treat it as hl-item/command rather than error
             if (expected.restOfLine === "true") return "hl-item";
             return "hl-error";
         case "item_id": 
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
         case "int": 
             return /^([~^]-?\d*|-?\d+)$/.test(word) ? "hl-number" : "hl-error";
-        default: return ""; // Failsafe for things like json_component
+        default: return "";
     }
 }
 
