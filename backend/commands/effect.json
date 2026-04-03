@@ -1,8 +1,8 @@
 {
   "command": "effect",
   "pattern": [
-    { "type": "word", "options": ["*"] },
-    { "type": "word", "options": ["*"] },
+    { "type": "target", "required": true },
+    { "type": "word", "options": ["*"], "required": true },
     { "type": "int", "required": false },
     { "type": "int", "required": false },
     { "type": "word", "options": ["true", "false"], "required": false }
