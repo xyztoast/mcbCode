@@ -142,7 +142,17 @@ function getHighlightClass(word, expected) {
         case "item_id": 
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
         case "int": 
-            return /^([~^]-?\d*|-?\d+)$/.test(word) ? "hl-number" : "hl-error";
+            // 1. Check if it's a valid coordinate (~, ^) or decimal number
+            const isNumeric = /^([~^]-?\d*\.?\d*|-?\d+\.?\d*)$/.test(word);
+            if (!isNumeric) return "hl-error";
+
+            // 2. If it's a raw number (not relative), check min/max constraints
+            if (/^-?\d+\.?\d*$/.test(word)) {
+                const val = parseFloat(word);
+                if (expected.min !== undefined && val < expected.min) return "hl-error";
+                if (expected.max !== undefined && val > expected.max) return "hl-error";
+            }
+            return "hl-number";
         default: return "";
     }
 }
