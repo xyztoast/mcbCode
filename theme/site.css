@@ -18,6 +18,10 @@
   font-family: 'mcfont':
 }
 
+body {
+  background-color: #0c0c0c;
+}
+
 body::selection {     
   background: #05ee9380;
 }
