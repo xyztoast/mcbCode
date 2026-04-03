@@ -3,7 +3,7 @@
   "pattern": [
     { "type": "word", "options": ["add", "stop"], "required": true },
     { "type": "target", "required": true },
-    { "type": "int", "required": false },
+    { "type": "int", "required": false, "min": 0, "max": 4 },
     { "type": "int", "required": false },
     { "type": "word", "options": ["positional", "rotational"], "required": false }
   ]
