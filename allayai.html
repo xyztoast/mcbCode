@@ -250,6 +250,11 @@ header {
   font-family: 'mcfont', sans-serif;
   display: none;
 }
+
+.error-text {
+  color: #ff5555;
+  font-style: italic;
+}
   </style>
 </head>
 <body>
@@ -286,8 +291,9 @@ header {
 </div>
 
 <script>
-  // Replace with your Vercel deployment URL + /api/send
-  const workerUrl = "https://allay-proxy.vercel.app/api/send"; 
+  // STEP 1: MAKE SURE THIS LINK IS CORRECT
+  // It should look like: https://your-project.vercel.app/api/send
+  const workerUrl = "allay-proxy.vercel.app/api/send"; 
 
   const chatInput = document.getElementById('chat-input');
   const chatMessages = document.getElementById('chat-messages');
@@ -339,29 +345,29 @@ header {
       userPrompt: contextualPrompt
     };
 
-    try {
-      const response = await fetch(workerUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      
-      if (!response.ok) throw new Error('Proxy Error');
-      
-      const data = await response.json();
-      return data.choices?.[0]?.message?.content || "I couldn't generate a response.";
-    } catch (err) {
-      console.error(err);
-      throw err;
+    const response = await fetch(workerUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    
+    if (!response.ok) {
+        // Try to get the error message from the body
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP Error ${response.status}`);
     }
+    
+    const data = await response.json();
+    return data.choices?.[0]?.message?.content || "No content returned from AI.";
   }
 
-  function typeMessage(text) {
+  function typeMessage(text, isError = false) {
     const container = document.createElement('div');
     container.className = 'message-container bot-container';
     
     const msgDiv = document.createElement('div');
     msgDiv.className = 'message bot-message';
+    if (isError) msgDiv.classList.add('error-text');
     container.appendChild(msgDiv);
     chatMessages.appendChild(container);
 
@@ -382,7 +388,12 @@ header {
     if (isProcessing) return;
     
     const rawText = chatInput.value.trim();
-    if (rawText === "") return;
+    if (rawText === "" || workerUrl.includes("REPLACE_WITH")) {
+        if(workerUrl.includes("REPLACE_WITH")) {
+            typeMessage("Error: Not your fault, this is mcbCode's fault", true);
+        }
+        return;
+    }
 
     isProcessing = true;
     sendBtn.disabled = true;
@@ -394,10 +405,6 @@ header {
     msgDiv.className = 'message user-message';
     msgDiv.textContent = rawText;
     container.appendChild(msgDiv);
-    const metaDiv = document.createElement('div');
-    metaDiv.className = 'message-meta';
-    metaDiv.textContent = currentMode;
-    container.appendChild(metaDiv);
     chatMessages.appendChild(container);
     
     chatInput.value = "";
@@ -412,7 +419,7 @@ header {
       typeMessage(response);
     } catch (error) {
       typingStatus.style.display = 'none';
-      typeMessage("Water may have taken the redstone signal out... it seems blocked.");
+      typeMessage(`Water hit the redstone! Error: ${error.message}`, true);
     } finally {
       isProcessing = false;
       sendBtn.disabled = false;
