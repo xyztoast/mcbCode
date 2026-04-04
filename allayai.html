@@ -339,7 +339,7 @@ header {
   }
 
 async function callWorker(prompt) {
-    const contextualPrompt = `${prompt} [${currentMode()}]`;
+const contextualPrompt = `${prompt} [${currentMode}]`;
     
     const payload = {
       userPrompt: contextualPrompt
