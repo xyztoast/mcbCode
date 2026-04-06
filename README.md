@@ -1,4 +1,4 @@
-# mcbCode
+# ✨ mcbCode ✨
 
 one of the first dedicated code editors for `.mcfunction`, specifically built for the Minecraft Bedrock Edition command system.
 
