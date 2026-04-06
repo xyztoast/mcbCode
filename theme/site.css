@@ -15,11 +15,11 @@
     }
 
 * {
-  font-family: 'mcfont', sans-serif !important;
+  font-family: 'mcfont', sans-serif;
 }
 
 body {
-  background-color: #0c0c0c !important;
+  background-color: #0c0c0c;
 }
 
 body::selection {     
