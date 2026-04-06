@@ -1,0 +1,12 @@
+{
+  "command": "alwaysday",
+  "overloads": [
+    {
+      "pattern": [
+        { "type": "word", "options": ["true", "false"] },
+        { "type": "target", "required": true },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    }
+  ]
+}
