@@ -15,43 +15,43 @@
     }
 
 * {
-  font-family: 'mcfont', sans-serif;
+  font-family: 'mcfont', sans-serif !important;
 }
 
 body {
-  background-color: #0c0c0c;
+  background-color: #0c0c0c !important;
 }
 
 body::selection {     
-  background: #05ee9380;
+  background: #05ee9380 !important;
 }
 
 g {
-  color: #05ee93;
-  font-family: inherit;
+  color: #05ee93 !important;
+  font-family: inherit !important;
 }
 
 c {
-  color: #e7007b;
+  color: #e7007b !important;
 }
 
 h1 {
-  font-family: 'mcfontb';
+  font-family: 'mcfontb' !important;
 }
 h2 {
-  font-family: 'mcfontb';
+  font-family: 'mcfontb' !important;
 }
 h3 {
-  font-family: 'mcfontb';
+  font-family: 'mcfontb' !important;
 }
 h4 {
-  font-family: 'mcfont';
+  font-family: 'mcfont' !important;
 }
 p {
-  font-family: 'mcfont';
+  font-family: 'mcfont' !important;
 }
 input {
-  font-family: 'mcfont';
+  font-family: 'mcfont' !important;
 }
 button {
   font-family: 'mcfont';
