@@ -9,7 +9,7 @@
 <link id="theme-link" rel="stylesheet" href="https://mcbcode.com/theme/editor/default.css">
 <meta charset="UTF-8">
 <link rel="icon" href="/icons/mcbcode.png">
-<title>mcbCode editor</title>
+<title>Editor | mcbCode</title>
 <style>
   body {
     margin: 0;
@@ -96,8 +96,8 @@
     margin: 0;
     border: none;
     outline: none;
-    font-family: monospace !important;
-    line-height: 1.2em;
+    font-family: 'Courier New', monospace !important;
+    line-height: 1.2;
     font-size: 12px;
     white-space: pre;
     word-wrap: normal;
@@ -110,9 +110,8 @@
   .code-area {
     z-index: 2;
     background: transparent !important;
-    color: transparent !important; 
-    caret-color: #fff !important;
-    font-family: monospace !important;
+    color: transparent; 
+    caret-color: #ffffff !important;
     resize: none;
   }
 
@@ -120,9 +119,14 @@
   .highlight-layer {
     z-index: 1;
     background-color: #0c0c0c;
-    color: #f0f0f0;
-    font-family: monospace !important;
+    color: #ffffff;
     pointer-events: none; 
+  }
+
+  .code-area, 
+  .highlight-layer, 
+  .highlight-layer * {
+    font-family: monospace !important;
   }
 
   .nav-item {
@@ -378,8 +382,8 @@ give @r stone_sword</textarea>
     </div>
 
   <!-- load stuff -->
-<script src="backend/grammar.js"></script>
-<script src="backend/highlight.js"></script>
+<script src="https://mcbcode.com/backend/grammar.js"></script>
+<script src="https://mcbcode.com/backend/highlight.js"></script>
 
   <script>
 const codeArea = document.getElementById('codeArea');
@@ -663,7 +667,7 @@ document.getElementById('exportCode').addEventListener('click', () => {
   .highlight-layer {
     z-index: 1;
     background-color: #0c0c0c;
-    color: #f0f0f0;
+    color: #ffffff;
     font-family: monospace !important;
     pointer-events: none; 
   }
