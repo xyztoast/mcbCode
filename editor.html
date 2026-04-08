@@ -381,6 +381,8 @@ textarea.addEventListener('input', adjustWidth);
         <p><g>mcbCode Shortcuts</g></p>
         <p><kbs>Ctrl+Alt+D</kbs> Delete Code</p>
         <p><kbs>Ctrl+S</kbs> Download File</p>
+        <p><kbs>Ctrl+[</kbs> Decrease Font Size</p>
+        <p><kbs>Ctrl+]</kbs> Increase Font Size</p>
       </div>
     </div>
 
@@ -627,9 +629,18 @@ document.addEventListener('keydown', (e) => {
     updateHighlighting();
 
 
-    // font size changing
-    function setFontSize(size) {
-  const fontSize = size + 'px';
+// 1. Initialize the state
+let currentFontSize = 16; 
+
+/**
+ * Updates the font size for all editor components
+ * and triggers re-alignment functions.
+ */
+function setFontSize(size) {
+  // Clamp between 8 and 36
+  currentFontSize = Math.min(Math.max(size, 8), 36);
+  
+  const fontSize = currentFontSize + 'px';
   const selectors = ['.code-area', '.highlight-layer', '.line-numbers'];
 
   selectors.forEach(selector => {
@@ -639,11 +650,34 @@ document.addEventListener('keydown', (e) => {
     });
   });
 
-  // Most code editors need line height adjusted to match font size
-  // updateLineNumbers() and updateHighlighting() are called if they exist
+  // Trigger re-calculation of highlights and line numbers
   if (typeof updateLineNumbers === 'function') updateLineNumbers();
   if (typeof updateHighlighting === 'function') updateHighlighting();
 }
+
+/**
+ * Keyboard listener for Ctrl + [ and Ctrl + ]
+ * Using 'true' (capture phase) to intercept the keys before 
+ * they reach the textarea and cause ghost characters.
+ */
+window.addEventListener('keydown', (e) => {
+  // Check for Ctrl (or Cmd on Mac) + brackets
+  if ((e.ctrlKey || e.metaKey) && (e.key === '[' || e.key === ']')) {
+    
+    // STOP the character from being typed
+    e.preventDefault();
+    e.stopImmediatePropagation();
+
+    if (e.key === ']') { 
+      // Increase size
+      setFontSize(currentFontSize + 2);
+    } else if (e.key === '[') { 
+      // Decrease size
+      setFontSize(currentFontSize - 2);
+    }
+  }
+}, true); // This 'true' is critical to stop the '[' from appearing
+
 
   </script>
   <script src="https://mcbcode.com/app/editor.js"></script>
