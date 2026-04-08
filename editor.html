@@ -262,7 +262,7 @@ kbs {
   position: fixed;
   top: 100px;
   z-index: 50;
-  right: 20px;
+  right: 30px;
 }
 
 #findthing {
@@ -279,7 +279,7 @@ kbs {
 <body>
 
   <div class="find-panel-wrapper">
-    <p style="opacity: 1  !important;">Find</p>
+    <p style="opacity: 1  !important;">Find Tool</p>
     <textarea id="findthing"></textarea>
   </div>
 
@@ -425,6 +425,7 @@ textarea.addEventListener('input', function() {
         <p><kbs>Ctrl+S</kbs> Download File</p>
         <p><kbs>Ctrl+[</kbs> Decrease Font Size</p>
         <p><kbs>Ctrl+]</kbs> Increase Font Size</p>
+        <p><kbs>Ctrl+F</kbs> Find and Replace</p>
         <br>
         <p><g></g></p>
         <p><kbs></kbs></p>
@@ -736,6 +737,47 @@ window.addEventListener('keydown', (e) => {
     .catch(console.error);
 }
 
+
+</script>
+
+<script>
+// find/replace panel shoh/hide
+const findPanel = document.querySelector('.find-panel-wrapper');
+const findInput = document.getElementById('findthing');
+
+// Initial setup for the fade
+findPanel.style.transition = 'opacity 0.2s ease, visibility 0.2s';
+findPanel.style.opacity = '0';
+findPanel.style.visibility = 'hidden';
+
+window.addEventListener('keydown', (e) => {
+  // Catch Ctrl+F or Cmd+F
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'f') {
+    e.preventDefault();
+
+    const isHidden = findPanel.style.visibility === 'hidden';
+
+    if (isHidden) {
+      findPanel.style.visibility = 'visible';
+      findPanel.style.opacity = '1';
+      
+      // The "Auto-Focus" fix:
+      setTimeout(() => {
+        findInput.focus();
+      }, 50); 
+
+    } else {
+      findPanel.style.opacity = '0';
+      findPanel.style.visibility = 'hidden';
+    }
+  }
+
+  // Hide on Escape
+  if (e.key === 'Escape') {
+    findPanel.style.opacity = '0';
+    findPanel.style.visibility = 'hidden';
+  }
+});
 
 </script>
 
