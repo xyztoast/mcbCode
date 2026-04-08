@@ -31,6 +31,10 @@ g {
   font-family: inherit !important;
 }
 
+opacity {
+    opacity: 0.5;
+}
+
 c {
   color: #e7007b !important;
 }
