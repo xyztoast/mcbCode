@@ -567,14 +567,13 @@ document.addEventListener('keydown', (e) => {
 });
 
 
-document.getElementById('exportCode').addEventListener('click', () => {
+const downloadFile = () => {
   const codeArea = document.getElementById('codeArea');
-
-  const fileNameArea = document.getElementById('autoWidth'); 
+  const fileNameArea = document.getElementById('autoWidth');
 
   if (!codeArea.value) return;
 
-  // get filename from textarea, fallback to "script"
+  // get filename from textarea, fallback to "untitled"
   let fileName = (fileNameArea.value || 'untitled')
     .replace(/[^a-z0-9_\-]/gi, '_') + '.mcfunction';
 
@@ -584,7 +583,19 @@ document.getElementById('exportCode').addEventListener('click', () => {
   a.download = fileName;
   a.click();
   URL.revokeObjectURL(a.href);
+};
+
+// Button Click Listener
+document.getElementById('exportCode').addEventListener('click', downloadFile);
+
+// Ctrl + Alt + S Shortcut
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.key.toLowerCase() === 's') {
+    e.preventDefault(); // Prevents the browser's "Save Page As" dialog
+    downloadFile();
+  }
 });
+
 
     const colorMenu = document.getElementById('colorMenu');
     colorMenu.querySelectorAll('div').forEach(item => {
