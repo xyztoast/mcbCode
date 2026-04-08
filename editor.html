@@ -154,7 +154,7 @@
   }
 
   .nav-dropdown div:hover {
-    background-color: #323738;
+    background-color: #454545;
   }
 
   .nav-item:hover .nav-dropdown {
@@ -165,12 +165,12 @@
     display: none;
     min-width: 225px !important;
     flex-direction: column;
-    background-color: #212425;
+    background-color: #323232;
     font-size: 9px;
   }
 
   .sub-dropdown:hover {
-    background-color: #212425 !important;
+    background-color: #323232 !important;
   }
 
   #colorFormat:hover .sub-dropdown {
@@ -254,9 +254,35 @@ kbs {
   background-color: #454545;
   padding: 3px 3px;
 }
+
+.find-panel-wrapper {
+  background-color: rgba(50, 50, 50, 0.25);
+  backdrop-filter: blur(5px);
+  padding: 4px 8px;
+  position: fixed;
+  top: 100px;
+  z-index: 50;
+  right: 20px;
+}
+
+#findthing {
+  resize: none;
+  background-color: #0c0c0c;
+  outline: none;
+  border: none;
+  color: #ffffff;
+  height: 360px;
+
+}
 </style>
 </head>
 <body>
+
+  <div class="find-panel-wrapper">
+    <p style="opacity: 1  !important;">Find</p>
+    <textarea id="findthing"></textarea>
+  </div>
+
     <div class="top-thing" style="display: flex; align-items: center; height: 50px;">
         <a href="https://mcbcode.com" style="padding-left: 12px;"><img src="https://mcbcode.com/theme/favicon.png" alt="icon" style="width: 36px"></a>
         <h2 style="padding: 0px 12px;">mcb<g>Code</g></h2>
@@ -285,6 +311,20 @@ adjustWidth();
 
 // update as user types
 textarea.addEventListener('input', adjustWidth);
+
+
+
+// find textarea show/hide
+const textarea = document.getElementById('findthing');
+
+textarea.addEventListener('input', function() {
+  // Reset height to 'auto' to allow shrinking when text is deleted
+  this.style.height = 'auto';
+  
+  // Set the new height based on the content's scroll height
+  this.style.height = this.scrollHeight + 'px';
+});
+
 </script>
     <div class="navi">
       <div class="nav-left">
@@ -341,7 +381,7 @@ textarea.addEventListener('input', adjustWidth);
       </div>
     </div>
 <div class="has-submenu">
-      <img src="https://ccvaults.com/thumbnails/10.%20Items/18.%20Consumables/Apple.png" style="width: 16px; height: 16px; padding-right: 4px;">Font Size
+      <img src="https://ccvaults.com/thumbnails/10.%20Items/18.%20Consumables/Enchanted_Golden_Apple.png" style="width: 16px; height: 16px; padding-right: 4px;">Font Size
       <div class="sub-dropdown">
         <div class="theme-btn" onclick="setFontSize('12')">Tiny <opacity> 12px</opacity></div>
         <div class="theme-btn" onclick="setFontSize('14')">Default <opacity> 14px</opacity></div>
@@ -350,7 +390,7 @@ textarea.addEventListener('input', adjustWidth);
         <div class="theme-btn" onclick="setFontSize('20')">X Large <opacity> 20px</opacity></div>
         <div class="theme-btn" onclick="setFontSize('22')">2X Large <opacity> 22px</opacity></div>
         <br>
-        <p style="line-height: 1.8em;">Alternatively, you can press <kbs>Ctrl+[ or ]</kbs> to change the font size</p>
+        <p style="line-height: 1.8em;">Alternatively, you can press <kbs>Ctrl + [ or ]</kbs> to change the font size</p>
       </div>
     </div>
   </div>
@@ -385,6 +425,9 @@ textarea.addEventListener('input', adjustWidth);
         <p><kbs>Ctrl+S</kbs> Download File</p>
         <p><kbs>Ctrl+[</kbs> Decrease Font Size</p>
         <p><kbs>Ctrl+]</kbs> Increase Font Size</p>
+        <br>
+        <p><g></g></p>
+        <p><kbs></kbs></p>
       </div>
     </div>
 
@@ -692,6 +735,8 @@ window.addEventListener('keydown', (e) => {
     .then(() => console.log('sw registered'))
     .catch(console.error);
 }
+
+
 </script>
 
 
