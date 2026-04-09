@@ -1,13 +1,47 @@
 {
   "command": "fill",
-  "pattern": [
-    { "type": "int" },
-    { "type": "int" },
-    { "type": "int" },
-    { "type": "int" },
-    { "type": "int" },
-    { "type": "int" },
-    { "type": "word", "required": true, "options": ["*"] },
-    { "type": "json_component", "required": false }
+  "overloads": [
+    {
+      "description": "fill, no blockstates, no replace",
+      "pattern": [
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": false, "options": ["destroy", "hollow", "keep", "outline", "replace"] }
+      ]
+    },
+    {
+      "description": "fill, with blockstates, no replace",
+      "pattern": [
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": false, "options": ["destroy", "hollow", "keep", "outline", "replace"] }
+      ]
+    },
+    {
+      "description": "fill, no blockstates, replace",
+      "pattern": [
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": true, "options": ["replace"] },
+        { "type": "word", "required": false, "options": ["*"] },
+        { "type": "word", "required": false, "options": ["*"] }
+      ]
+    },
+    {
+      "description": "fill, with blockstates, replace",
+      "pattern": [
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "int", "required": true }, { "type": "int", "required": true }, { "type": "int", "required": true },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": true, "options": ["*"] },
+        { "type": "word", "required": true, "options": ["replace"] },
+        { "type": "word", "required": false, "options": ["*"] },
+        { "type": "word", "required": false, "options": ["*"] }
+      ]
+    }
   ]
 }
