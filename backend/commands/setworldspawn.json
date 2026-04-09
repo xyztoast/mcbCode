@@ -1,0 +1,8 @@
+{
+  "command": "tp",
+  "pattern": [
+     { "type": "int", "required": true },
+     { "type": "int", "required": true },
+     { "type": "int", "required": true }
+  ]
+}
