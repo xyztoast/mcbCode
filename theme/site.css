@@ -39,6 +39,9 @@ c {
   color: #e7007b !important;
 }
 
+br {
+    user-select: none;
+}
 h1 {
   font-family: 'mcfontb' !important;
 }
