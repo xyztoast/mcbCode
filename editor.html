@@ -119,7 +119,7 @@
   .highlight-layer {
     z-index: 1;
     background-color: #0c0c0c;
-    color: #05ee93;
+    color: #ffffff;
     pointer-events: none; 
   }
 
@@ -139,7 +139,7 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background-color: #323232;
+    background-color: #212425;
     border: 1px solid #bebebe;
     min-width: 250px;
     z-index: 100;
@@ -376,19 +376,6 @@ textarea.addEventListener('input', function() {
         <div class="theme-btn" onclick="setTheme('solid')">Solid</div>
       </div>
     </div>
-<div class="has-submenu">
-      <img src="https://ccvaults.com/thumbnails/10.%20Items/18.%20Consumables/Enchanted_Golden_Apple.png" style="width: 16px; height: 16px; padding-right: 4px;">Font Size
-      <div class="sub-dropdown">
-        <div class="theme-btn" onclick="setFontSize('12')">Tiny <opacity> 12px</opacity></div>
-        <div class="theme-btn" onclick="setFontSize('14')">Default <opacity> 14px</opacity></div>
-        <div class="theme-btn" onclick="setFontSize('16')">Medium <opacity> 16px</opacity></div>
-        <div class="theme-btn" onclick="setFontSize('18')">Large <opacity> 18px</opacity></div>
-        <div class="theme-btn" onclick="setFontSize('20')">X Large <opacity> 20px</opacity></div>
-        <div class="theme-btn" onclick="setFontSize('22')">2X Large <opacity> 22px</opacity></div>
-        <br>
-        <p style="line-height: 1.8em;">Alternatively, you can press <kbs>Ctrl + [ or ]</kbs> to change the font size</p>
-      </div>
-    </div>
   </div>
 </div>
         <div class="nav-item">
@@ -426,6 +413,9 @@ textarea.addEventListener('input', function() {
         <p><kbs>Ctrl+[</kbs> Decrease Font Size</p>
         <p><kbs>Ctrl+]</kbs> Increase Font Size</p>
         <p><kbs>Ctrl+F</kbs> Find and Replace</p>
+        <br>
+        <p><g></g></p>
+        <p><kbs></kbs></p>
       </div>
     </div>
 
@@ -500,7 +490,9 @@ title @a actionbar qwertyuiop</textarea>
       </div>
     </div>
 </div>
-
+  <!-- load stuff -->
+<script src="https://mcbcode.com/backend/grammar.js"></script>
+<script src="https://mcbcode.com/backend/highlight.js"></script>
 
 
 
@@ -651,9 +643,6 @@ codeArea.addEventListener('keydown', (e) => {
         updateHighlighting();
     }
 });
-
-</script>
-<script>
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
@@ -690,8 +679,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-</script>
-<script>
+
 const downloadFile = () => {
   const codeArea = document.getElementById('codeArea');
   const fileNameArea = document.getElementById('autoWidth');
@@ -721,8 +709,7 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-</script>
-<script>
+
     const colorMenu = document.getElementById('colorMenu');
     colorMenu.querySelectorAll('div').forEach(item => {
       item.addEventListener('click', () => {
@@ -792,6 +779,9 @@ window.addEventListener('keydown', (e) => {
 
 
   </script>
+  <script src="https://mcbcode.com/app/editor.js"></script>
+
+
 
 <script>
   if ('serviceWorker' in navigator) {
@@ -804,7 +794,7 @@ window.addEventListener('keydown', (e) => {
 </script>
 
 <script>
-// find/replace panel shoh/hide
+// find/replace panel show/hide
 const findPanel = document.querySelector('.find-panel-wrapper');
 const findInput = document.getElementById('findthing');
 
@@ -911,10 +901,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   
-  <!-- load stuff -->
-<script src="https://mcbcode.com/backend/grammar.js"></script>
-<script src="https://mcbcode.com/backend/highlight.js"></script>
-
 
   
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
