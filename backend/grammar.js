@@ -118,7 +118,8 @@ function processSegmentsSync(segments) {
             }
 
             // Check for the new restOfLine state using the winning pattern
-            if (matchedExpected && matchedExpected.restOfLine === "true") {
+            // json type always triggers restOfLine since json blobs span the whole rest of the line
+            if (matchedExpected && (matchedExpected.restOfLine === "true" || matchedExpected.type === "json")) {
                 restOfLineMode = true;
                 restOfLineClass = bestClass;
             }
@@ -169,7 +170,7 @@ function getHighlightClass(word, expected) {
             return "hl-error";
         case "item_id": 
             return /^([a-z0-9_]+:)?[a-z0-9_]+$/.test(word) ? "hl-item" : "hl-error";
-        case "int": 
+        case "int": {
             // 1. Check if it's a valid coordinate (~, ^) or decimal number
             const isNumeric = /^([~^]-?\d*\.?\d*|-?\d+\.?\d*)$/.test(word);
             if (!isNumeric) return "hl-error";
@@ -181,6 +182,20 @@ function getHighlightClass(word, expected) {
                 if (expected.max !== undefined && val > expected.max) return "hl-error";
             }
             return "hl-number";
+        }
+        case "float": {
+            // Same as int but explicitly allows decimals, no ~ ^ support
+            const isFloat = /^-?\d+(\.\d+)?$/.test(word);
+            if (!isFloat) return "hl-error";
+            const val = parseFloat(word);
+            if (expected.min !== undefined && val < expected.min) return "hl-error";
+            if (expected.max !== undefined && val > expected.max) return "hl-error";
+            return "hl-number";
+        }
+        case "json":
+            // Marks the rest of the line as a json blob (tellraw, summon events, etc)
+            // Accepts anything that starts with { or [ as valid json-like content
+            return /^[\[{]/.test(word.trim()) ? "hl-item" : "hl-error";
         default: return "";
     }
 }
