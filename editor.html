@@ -331,6 +331,7 @@ textarea.addEventListener('input', function() {
           <div class="nav-dropdown">
             <div id="copyCode"><img src="https://ccvaults.com/thumbnails/10.%20Items/15.%20Projectiles/Ender_Pearl.png" style="width: 16px; height: 16px; padding-right: 4px;">Copy Code</div>
             <div id="exportCode"><img src="https://ccvaults.com/thumbnails/10.%20Items/11.%20Materials/Diamond.png" style="width: 16px; height: 16px; padding-right: 4px;">Export as .mcfunction</div>
+            <div id="exportCodeTxt"><img src="https://ccvaults.com/thumbnails/10.%20Items/11.%20Materials/Emerald.png" style="width: 16px; height: 16px; padding-right: 4px;"><g>Export as .txt</g></div>
           </div>
         </div>
         <div class="nav-item">
@@ -721,6 +722,30 @@ const downloadFile = () => {
 
 // Button Click Listener
 document.getElementById('exportCode').addEventListener('click', downloadFile);
+
+
+
+
+const downloadFile = () => {
+  const codeArea = document.getElementById('codeArea');
+  const fileNameArea = document.getElementById('autoWidth');
+
+  if (!codeArea.value) return;
+
+  // get filename from textarea, fallback to "untitled"
+  let fileName = (fileNameArea.value || 'untitled')
+    .replace(/[^a-z0-9_\-]/gi, '_') + '.txt';
+
+  const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+
+// Button Click Listener
+document.getElementById('exportCodeTxt').addEventListener('click', downloadFile);
 
 // Ctrl + Alt + S Shortcut
 document.addEventListener('keydown', (e) => {
