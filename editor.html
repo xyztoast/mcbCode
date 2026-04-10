@@ -501,7 +501,7 @@ textarea.addEventListener('input', function() {
       <pre id="lineNumbers" class="line-numbers">1</pre>
       <div class="code-container">
         <div class="highlight-layer" id="highlightLayer"></div>
-        <textarea class="code-area" id="codeArea" spellcheck="false" placeholder="#welcome to mcbCode"># welcome to mcbCode. 
+        <textarea class="code-area" id="codeArea" spellcheck="false" placeholder="# welcome to mcbCode"># welcome to mcbCode. 
 title @a actionbar qwertyuiop</textarea>
       </div>
     </div>
@@ -786,7 +786,7 @@ let currentFontSize = 16;
  */
 function setFontSize(size) {
   // Clamp between 8 and 36
-  currentFontSize = Math.min(Math.max(size, 8), 36);
+  currentFontSize = Math.min(Math.max(size, 8), 48);
 
   const fontSize = currentFontSize + 'px';
   const selectors = ['.code-area', '.highlight-layer', '.line-numbers'];
