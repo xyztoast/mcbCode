@@ -1,0 +1,7 @@
+{
+    "command": "tellraw",
+    "pattern": [
+        { "type": "target" },
+        { "type": "json", "restOfLine": "true" }
+    ]
+}
