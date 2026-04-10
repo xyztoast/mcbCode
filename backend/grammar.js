@@ -84,6 +84,34 @@ function processSegmentsSync(segments) {
                 // Grab the expected object from the first survivor to determine the CSS/RestOfLine
                 matchedExpected = activePatterns[0][argCounter];
                 bestClass = getHighlightClass(segment, matchedExpected);
+
+                // --- NESTED PATTERN SUPPORT ---
+                // If the matched arg has nested overloads or a nested pattern, expand them.
+                // We collect all nested patterns from ALL surviving patterns that matched
+                // this word, merge them into a new activePatterns list, and reset argCounter.
+                // This is 100% backwards compatible - if no nested patterns exist, nothing changes.
+                let nestedPatterns = [];
+                for (let sp of survivingPatterns) {
+                    let exp = sp[argCounter];
+                    if (!exp) continue;
+                    // Only expand nested patterns if this word actually matched
+                    if (getHighlightClass(segment, exp) === "hl-error") continue;
+                    if (exp.overloads && Array.isArray(exp.overloads)) {
+                        // e.g. { type: "word", options: ["objectives"], overloads: [{pattern:[...]}, ...] }
+                        for (let ov of exp.overloads) {
+                            if (ov.pattern) nestedPatterns.push(ov.pattern);
+                        }
+                    } else if (exp.pattern && Array.isArray(exp.pattern)) {
+                        // e.g. { type: "word", options: ["add"], pattern: [...] }
+                        nestedPatterns.push(exp.pattern);
+                    }
+                }
+
+                if (nestedPatterns.length > 0) {
+                    // Switch into the nested pattern context
+                    activePatterns = nestedPatterns;
+                    argCounter = -1; // will be incremented to 0 at end of loop
+                }
             } else {
                 // No patterns matched. The user typed an error.
                 bestClass = "hl-error";
