@@ -1,0 +1,6 @@
+{
+  "command": "clear",
+  "pattern": [
+    { "type": "word", "required": true, "options": ["true", "false"] }
+  ]
+}
