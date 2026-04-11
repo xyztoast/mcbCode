@@ -483,16 +483,21 @@ findTextArea.addEventListener('input', function() {
 
 <!--code editor textarea-->
     <div class="editor" id="editor">
-      <div class="sidebar">
-        <div class="sidebar-kbd" style="color: #00b2ff">Font Size:<br></div>
-        <div class="sidebar-kbd" id="fontdisplay" style="color: #00b2ff"></div>
-        <div style="border-bottom: 1px solid #bebebe"></div>
-        <div class="sidebar-kbd" id="other">Other</div>
-        <div class="sidebar-kbd" id="shift">Shift</div>
-        <div class="sidebar-kbd" id="alt">Alt</div>
-        <div class="sidebar-kbd" id="ctrl">Ctrl</div>
-        <div style="border-top: 1px solid #bebebe"></div><br>
-        </div>
+<div class="sidebar">
+  <div class="sidebar-kbd" style="color: #00b2ff">Font Size:<br></div>
+  <div class="sidebar-kbd" id="fontdisplay" style="color: #00b2ff"></div>
+  <div style="border-bottom: 1px solid #bebebe"></div>
+  <div class="sidebar-kbd" style="color: #00b2ff; font-size: 9px; line-height: 1.6;">
+    <span id="caretLine">L: 1</span><br>
+    <span id="caretCol">C: 1</span>
+  </div>
+  <div style="border-bottom: 1px solid #bebebe"></div>
+  <div class="sidebar-kbd" id="other">Other</div>
+  <div class="sidebar-kbd" id="shift">Shift</div>
+  <div class="sidebar-kbd" id="alt">Alt</div>
+  <div class="sidebar-kbd" id="ctrl">Ctrl</div>
+  <div style="border-top: 1px solid #bebebe"></div><br>
+</div>
       <pre id="lineNumbers" class="line-numbers">1</pre>
       <div class="code-container">
         <div class="highlight-layer" id="highlightLayer"></div>
@@ -765,7 +770,23 @@ document.addEventListener('DOMContentLoaded', () => {
     mutationObs.observe(codeArea, { attributes: true, attributeFilter: ['style', 'class'] });
 });
 </script>
+<script>
+  function updateCaret() {
+    const area = document.getElementById('codeArea');
+    const pos = area.selectionStart;
+    const text = area.value.substring(0, pos);
+    const lines = text.split('\n');
+    const line = lines.length;
+    const col = lines[lines.length - 1].length + 1;
+    document.getElementById('caretLine').textContent = 'L: ' + line;
+    document.getElementById('caretCol').textContent = 'C: ' + col;
+}
 
+document.getElementById('codeArea').addEventListener('keyup', updateCaret);
+document.getElementById('codeArea').addEventListener('mouseup', updateCaret);
+document.getElementById('codeArea').addEventListener('click', updateCaret);
+document.getElementById('codeArea').addEventListener('selectionchange', updateCaret);
+</script>
 <script data-goatcounter="https://mcbcode.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 
 </body>
