@@ -1,0 +1,6 @@
+{
+  "command": "kill",
+  "pattern": [
+    { "type": "target", "required": true }
+  ]
+}
