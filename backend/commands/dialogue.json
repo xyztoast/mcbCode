@@ -1,0 +1,35 @@
+{
+    "command": "dialogue",
+    "overloads": [
+        {
+            "pattern": [
+                { "type": "word", "options": ["open"] },
+                { "type": "target" },
+                { "type": "target" },
+                { "type": "word", "options": ["*"] }
+            ]
+        },
+        {
+            "pattern": [
+                { "type": "word", "options": ["open"] },
+                { "type": "target" },
+                { "type": "target" }
+            ]
+        },
+        {
+            "pattern": [
+                { "type": "word", "options": ["change"] },
+                { "type": "target" },
+                { "type": "word", "options": ["*"] },
+                { "type": "target" }
+            ]
+        },
+        {
+            "pattern": [
+                { "type": "word", "options": ["change"] },
+                { "type": "target" },
+                { "type": "word", "options": ["*"] }
+            ]
+        }
+    ]
+}
