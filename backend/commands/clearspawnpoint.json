@@ -1,0 +1,6 @@
+{
+  "command": "clearspawnpoint",
+  "pattern": [
+    { "type": "target", "required": true }
+  ]
+}
