@@ -18,24 +18,67 @@ let selectorArgKeys = null;
 })();
 
 /**
- * Validate the contents of a @x[...] selector bracket against known bedrock keys.
- * Returns true if all key=value pairs use known keys, false otherwise.
+ * Renders a target selector segment as split html.
+ * @x or @x[key=val,...] — the @x[ part is hl-selector, key=val pairs are hl-word,
+ * commas and ] are hl-selector. plain @x with no brackets is just hl-selector.
+ * Player names are hl-selector too.
+ * Returns { html, valid } — valid is false if the segment doesnt match target format at all.
  */
-function validateSelectorArgs(bracketContent) {
-    if (!selectorArgKeys) return true; // not loaded yet, let it pass
-    // bracketContent is the string inside the [...] brackets
-    // split on commas, then check each key=value pair
-    const pairs = bracketContent.split(",");
-    for (let pair of pairs) {
-        pair = pair.trim();
-        if (!pair) continue;
-        // key=value or key=!value or key={...} (for scores/hasitem)
-        const eqIdx = pair.indexOf("=");
-        if (eqIdx === -1) return false;
-        const key = pair.slice(0, eqIdx).trim().toLowerCase();
-        if (!selectorArgKeys.includes(key)) return false;
+function renderTarget(word) {
+    // Plain player name — no brackets
+    if (/^[A-Za-z0-9_]{3,16}$/.test(word)) {
+        return { html: `<span class="hl-selector">${escapeHtml(word)}</span>`, valid: true };
     }
-    return true;
+
+    // @x with no brackets
+    const plainMatch = word.match(/^(@[aeprsv])$/i);
+    if (plainMatch) {
+        return { html: `<span class="hl-selector">${escapeHtml(word)}</span>`, valid: true };
+    }
+
+    // @x[...] with brackets
+    const bracketMatch = word.match(/^(@[aeprsv])\[(.*)\]$/i);
+    if (!bracketMatch) {
+        return { html: `<span class="hl-error">${escapeHtml(word)}</span>`, valid: false };
+    }
+
+    const prefix = bracketMatch[1];   // e.g. @e
+    const inner = bracketMatch[2];    // e.g. type=zombie,tag=mytag
+
+    // Validate keys if selectorArgKeys is loaded
+    let innerValid = true;
+    if (selectorArgKeys) {
+        const pairs = inner.split(",");
+        for (let pair of pairs) {
+            pair = pair.trim();
+            if (!pair) continue;
+            const eqIdx = pair.indexOf("=");
+            if (eqIdx === -1) { innerValid = false; break; }
+            const key = pair.slice(0, eqIdx).trim().toLowerCase();
+            if (!selectorArgKeys.includes(key)) { innerValid = false; break; }
+        }
+    }
+
+    if (!innerValid) {
+        // Invalid bracket contents — whole thing is an error
+        return { html: `<span class="hl-error">${escapeHtml(word)}</span>`, valid: false };
+    }
+
+    // Build split html: @x[ = hl-selector, each key=value = hl-word, commas+] = hl-selector
+    let html = `<span class="hl-selector">${escapeHtml(prefix)}[</span>`;
+
+    const pairs = inner.split(",");
+    for (let j = 0; j < pairs.length; j++) {
+        const pair = pairs[j];
+        html += `<span class="hl-word">${escapeHtml(pair)}</span>`;
+        if (j < pairs.length - 1) {
+            html += `<span class="hl-selector">,</span>`;
+        }
+    }
+
+    html += `<span class="hl-selector">]</span>`;
+
+    return { html, valid: true };
 }
 
 /**
@@ -48,8 +91,6 @@ function processSegmentsSync(segments) {
     let argCounter = 0;
     let restOfLineMode = false;
     let restOfLineClass = "";
-    let inString = false;       // true when inside an open quoted string
-    let executeChainMode = false; // true when inside execute subclauses (before run)
 
     for (let i = 0; i < segments.length; i++) {
         let segment = segments[i];
@@ -62,25 +103,7 @@ function processSegmentsSync(segments) {
 
         const segmentLower = segment.toLowerCase();
 
-        // --- STRING CARRY MODE ---
-        // If we're inside an open quoted string, keep consuming segments as hl-item
-        // until we find one that ends with an unescaped "
-        if (inString) {
-            processed += `<span class="hl-item">${escapeHtml(segment)}</span>`;
-            // Check if this segment closes the string (ends with " not preceded by \)
-            if (segment.endsWith('"') && !segment.endsWith('\\"')) {
-                inString = false;
-            }
-            continue;
-        }
-
         if (!commandData) {
-            // --- SLASH CHECK ---
-            if (!commandData && segment.startsWith("/")) {
-                processed += `<span class="hl-error">${escapeHtml(segment)}</span>`;
-                break;
-            }
-
             // Check cache for the base command (e.g., "give", "tickingarea")
             commandData = commandCache[segmentLower];
 
@@ -98,19 +121,14 @@ function processSegmentsSync(segments) {
                     activePatterns = [];
                 }
 
-                // If this is execute, enter chain mode
-                if (commandData.command === "execute") {
-                    executeChainMode = true;
-                }
-
             } else {
                 // Not in cache? Fetch for next time and mark as error for now
                 fetchCommandGrammar(segmentLower); 
                 processed += `<span class="hl-error">${escapeHtml(segment)}</span>`;
             }
         } else {
-            // Handle Execute run keyword — exits chain mode and recurses
-            if (segmentLower === "run" && executeChainMode) {
+            // Handle Execute Recursion
+            if (segmentLower === "run" && commandData.command === "execute") {
                 processed += `<span class="hl-command">run</span>`;
                 // Process the rest of the line as a new command
                 processed += processSegmentsSync(segments.slice(i + 1));
@@ -149,30 +167,6 @@ function processSegmentsSync(segments) {
             } else {
                 // No patterns matched. The user typed an error.
                 bestClass = "hl-error";
-
-                // --- EXECUTE CHAIN RESET ---
-                // If we're in execute chain mode and the current word didn't match,
-                // try resetting argCounter to 0 and re-matching against the execute overloads.
-                // This allows chaining: "at @a positioned ~ ~ ~ as @s ..."
-                if (executeChainMode && commandData) {
-                    let resetPatterns = commandData.overloads
-                        ? commandData.overloads.map(o => o.pattern)
-                        : (commandData.pattern ? [commandData.pattern] : []);
-
-                    let resetSurvivors = resetPatterns.filter(pattern => {
-                        let expected = pattern[0];
-                        if (!expected) return false;
-                        return getHighlightClass(segment, expected) !== "hl-error";
-                    });
-
-                    if (resetSurvivors.length > 0) {
-                        // Valid new subclause keyword — reset the race
-                        activePatterns = resetSurvivors;
-                        argCounter = 0;
-                        matchedExpected = activePatterns[0][0];
-                        bestClass = getHighlightClass(segment, matchedExpected);
-                    }
-                }
             }
 
             // Check for the new restOfLine state using the winning pattern
@@ -181,16 +175,16 @@ function processSegmentsSync(segments) {
                 restOfLineClass = bestClass;
             }
 
-            // --- STRING OPEN CHECK ---
-            // If this segment starts with " but doesn't end with a closing " it opens a string
-            if (bestClass === "hl-item" || bestClass === "hl-error") {
-                if (segment.startsWith('"') && !(segment.length > 1 && segment.endsWith('"') && !segment.endsWith('\\"'))) {
-                    inString = true;
-                    bestClass = "hl-item";
-                }
+            // --- TARGET SPLIT RENDER ---
+            // If the matched arg is a target type, use renderTarget instead of a plain span
+            // so @x[ part = hl-selector and key=value pairs inside = hl-word
+            if (matchedExpected && matchedExpected.type === "target") {
+                const rendered = renderTarget(segment);
+                processed += rendered.html;
+            } else {
+                processed += `<span class="${bestClass}">${escapeHtml(segment)}</span>`;
             }
 
-            processed += `<span class="${bestClass}">${escapeHtml(segment)}</span>`;
             argCounter++;
 
             // --- THE 3 LINES FOR CHAINING ---
@@ -225,22 +219,9 @@ function getHighlightClass(word, expected) {
     if (!expected) return ""; 
 
     switch (expected.type) {
-        case "target": 
-            return /^(@[a-p|e|s|r|v]|@[a-p|e|s|r|v]\[.*\]|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
-        case "selector_arg": {
-            // Must match @x[...] format, and keys inside brackets must be valid bedrock selector args
-            const match = word.match(/^@[aeprsv]\[(.*)\]$/i);
-            if (!match) return "hl-error";
-            return validateSelectorArgs(match[1]) ? "hl-selector" : "hl-error";
-        }
-        case "string": {
-            // A quoted string — starts and ends with "
-            // Single word: "hello" — valid
-            // If it only starts with " it will be caught by the inString carry logic above
-            if (word.startsWith('"') && word.endsWith('"') && word.length >= 2) return "hl-item";
-            if (word.startsWith('"')) return "hl-item"; // opening — carry handles the rest
-            return "hl-error";
-        }
+        case "target":
+            // Validation only — rendering is handled by renderTarget in processSegmentsSync
+            return /^(@[aeprsv](\[.*\])?|[A-Za-z0-9_]{3,16})$/i.test(word) ? "hl-selector" : "hl-error";
         case "word":
             if (expected.options) {
                 if (expected.options.includes("*")) return "hl-item"; 
