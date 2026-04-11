@@ -1,0 +1,6 @@
+{
+  "command": "deop",
+  "pattern": [
+    { "type": "target", "required": true }
+  ]
+}
