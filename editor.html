@@ -63,23 +63,28 @@
   }
 
 .line-numbers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     background-color: transparent;
     padding: 0 7px;
     font-family: mcfont;
     user-select: none;
-    overflow: hidden;
     text-align: right;
     line-height: 1.2em;
     font-size: 14px;
     margin: 0;
-    display: flex;
-    flex-direction: column;
     color: #858585;
     z-index: 10;
     pointer-events: none;
-    align-self: stretch;
+}
+
+.line-numbers-wrapper {
+    position: relative;
+    overflow: hidden;
     height: 100%;
-    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .line-numbers::-webkit-scrollbar {
@@ -494,7 +499,9 @@ findTextArea.addEventListener('input', function() {
   <div style="border-top: 1px solid #bebebe"></div><br>
 </div>
 <div style="overflow:hidden; height:100%; align-self:stretch; flex-shrink:0;">
+<div class="line-numbers-wrapper">
   <pre id="lineNumbers" class="line-numbers">1</pre>
+</div>
 </div>
       <div class="code-container">
         <div class="highlight-layer" id="highlightLayer"></div>
@@ -514,45 +521,43 @@ const highlightLayer = document.getElementById('highlightLayer');
 const lineNumbers = document.getElementById('lineNumbers');
 let highlightTimeout;
 
-function syncScroll() {
-    const offset = codeArea.scrollTop;
-    lineNumbers.style.transform = 'translateY(-' + offset + 'px)';
+function updateLineNumbers() {
+    const lines = codeArea.value.split('\n').length;
+    let lineContent = '';
+    for (let i = 1; i <= lines; i++) {
+        lineContent += i + '\n';
+    }
+    lineNumbers.textContent = lineContent;
     lineNumbers.style.transform = 'translateY(-' + codeArea.scrollTop + 'px)';
+}
+
+let isHighlighting = false;
+
+async function updateHighlighting() {
+    if (isHighlighting) return;
+    const text = codeArea.value;
+    isHighlighting = true;
+    window.requestAnimationFrame(async () => {
+        const highlighted = await applyHighlighting(text);
+        highlightLayer.innerHTML = highlighted;
+        isHighlighting = false;
+        highlightLayer.scrollTop = codeArea.scrollTop;
+        highlightLayer.scrollLeft = codeArea.scrollLeft;
+    });
+}
+
+function syncScroll() {
+    lineNumbers.style.transform = 'translateY(-' + codeArea.scrollTop + 'px)';
+    highlightLayer.scrollTop = codeArea.scrollTop;
     highlightLayer.scrollLeft = codeArea.scrollLeft;
 }
 
 codeArea.addEventListener('scroll', syncScroll);
 
-let isHighlighting = false;
-
-async function updateHighlighting() {
-    if (isHighlighting) return; 
-
-    const text = codeArea.value;
-    isHighlighting = true;
-
-    window.requestAnimationFrame(async () => {
-        if (typeof applyHighlighting === 'function') {
-            const highlighted = await applyHighlighting(text);
-            highlightLayer.innerHTML = highlighted;
-        }
-        isHighlighting = false;
-        highlightLayer.scrollTop = codeArea.scrollTop;
-        highlightLayer.scrollLeft = codeArea.scrollLeft;
-        lineNumbers.scrollTop = codeArea.scrollTop;
-    });
-}
-
-codeArea.addEventListener('scroll', () => {
-    lineNumbers.scrollTop = codeArea.scrollTop;
-    highlightLayer.scrollTop = codeArea.scrollTop;
-    highlightLayer.scrollLeft = codeArea.scrollLeft;
-});
-
 codeArea.addEventListener('input', () => {
     updateLineNumbers();
     clearTimeout(highlightTimeout);
-    highlightTimeout = setTimeout(updateHighlighting, 10); 
+    highlightTimeout = setTimeout(updateHighlighting, 10);
 });
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -572,6 +577,101 @@ codeArea.addEventListener('keydown', (e) => {
         updateHighlighting();
     }
 });
+
+document.getElementById('copyCode').addEventListener('click', () => {
+    const text = codeArea.value;
+    if (!text) return;
+    const dummy = document.createElement("textarea");
+    document.body.appendChild(dummy);
+    dummy.value = text;
+    dummy.select();
+    document.execCommand("copy");
+    document.body.removeChild(dummy);
+});
+
+document.getElementById('deleteCode').addEventListener('click', () => {
+    codeArea.value = '';
+    updateLineNumbers();
+    updateHighlighting();
+});
+
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.altKey && e.key.toLowerCase() === 'd') {
+        e.preventDefault();
+        codeArea.value = '';
+        updateLineNumbers();
+        updateHighlighting();
+    }
+});
+
+const downloadFile = () => {
+    const fileNameArea = document.getElementById('autoWidth');
+    if (!codeArea.value) return;
+    let fileName = (fileNameArea.value || 'untitled').replace(/[^a-z0-9_\-]/gi, '_') + '.mcfunction';
+    const blob = new Blob([codeArea.value], { type: 'application/octet-stream' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(a.href);
+};
+
+document.getElementById('exportCode').addEventListener('click', downloadFile);
+
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        downloadFile();
+    }
+});
+
+const colorMenu = document.getElementById('colorMenu');
+colorMenu.querySelectorAll('div').forEach(item => {
+    item.addEventListener('click', () => {
+        const code = item.getAttribute('data-code');
+        const start = codeArea.selectionStart;
+        const end = codeArea.selectionEnd;
+        codeArea.value = codeArea.value.slice(0, start) + code + codeArea.value.slice(end);
+        codeArea.selectionStart = codeArea.selectionEnd = start + code.length;
+        codeArea.focus();
+        updateHighlighting();
+    });
+});
+
+updateLineNumbers();
+updateHighlighting();
+
+let currentFontSize = 16;
+
+function setFontSize(size) {
+    currentFontSize = Math.min(Math.max(size, 8), 36);
+    const fontSize = currentFontSize + 'px';
+    ['.code-area', '.highlight-layer', '.line-numbers'].forEach(selector => {
+        document.querySelectorAll(selector).forEach(el => el.style.fontSize = fontSize);
+    });
+    updateLineNumbers();
+    updateHighlighting();
+}
+
+window.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === '[' || e.key === ']')) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        setFontSize(currentFontSize + (e.key === ']' ? 2 : -2));
+    }
+}, true);
+
+function updateCaret() {
+    const pos = codeArea.selectionStart;
+    const text = codeArea.value.substring(0, pos);
+    const lines = text.split('\n');
+    document.getElementById('caretLine').textContent = 'L: ' + lines.length;
+    document.getElementById('caretCol').textContent = 'C: ' + (lines[lines.length - 1].length + 1);
+}
+
+codeArea.addEventListener('keyup', updateCaret);
+codeArea.addEventListener('mouseup', updateCaret);
+codeArea.addEventListener('click', updateCaret);
 </script>
 
 <script>
