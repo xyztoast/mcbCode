@@ -46,7 +46,7 @@ async function applyHighlighting(text) {
 function setTheme(themeName) {
     const themeLink = document.getElementById('theme-link');
     if (themeLink) {
-        const themeUrl = `theme/editor/${themeName.toLowerCase()}.css`;
+        const themeUrl = `https://mcbcode.com/theme/editor/${themeName.toLowerCase()}.css`;
         themeLink.href = themeUrl;
         localStorage.setItem('selected-editor-theme', themeName.toLowerCase());
         console.log("Switched theme to:", themeUrl);
