@@ -1,0 +1,12 @@
+{
+  "command": "locate",
+  "overloads": [
+    {
+      "pattern": [
+        { "type": "word", "options": ["structure", "biome"] },
+        { "type": "word", "options": ["*"] },
+        { "type": "word", "options": ["true", "false"], "required": false }
+      ]
+    }
+  ]
+}
