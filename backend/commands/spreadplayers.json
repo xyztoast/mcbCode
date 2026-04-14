@@ -1,0 +1,12 @@
+{
+  "command": "spreadplayers",
+      "pattern": [
+        { "type": "int", "required": true },
+        { "type": "int", "required": true }, 
+        { "type": "int", "required": true },
+        { "type": "int", "required": true },
+        { "type": "target", "required": true }
+      ]
+    }
+  ]
+}
