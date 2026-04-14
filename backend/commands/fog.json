@@ -1,0 +1,23 @@
+{
+  "command": "fog",
+  "overloads": [
+    {
+  "pattern": [
+    { "type": "target", "required": true },
+    { "type": "word", "required": true, "options": ["push"] },
+    { "type": "word", "options": ["*"] }
+    },
+    {
+  "pattern": [
+    { "type": "target", "required": true },
+    { "type": "word", "required": true, "options": ["pop"] },
+    { "type": "word", "required": true, "options": ["*"] }
+    },
+    {
+  "pattern": [
+    { "type": "target", "required": true },
+    { "type": "word", "required": true, "options": ["remove"] },
+    { "type": "word", "required": true, "options": ["*"] },
+    }
+  ]
+}
