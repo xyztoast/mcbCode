@@ -1,0 +1,7 @@
+{
+  "command": "weather",
+  "pattern": [
+    { "type": "word", "required": true, "options": ["rain", "thunder", "clear"] },
+    { "type": "int" }
+  ]
+}
