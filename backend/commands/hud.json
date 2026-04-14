@@ -1,0 +1,27 @@
+{
+  "command": "hud",
+  "overloads": [
+    {
+      "pattern": [
+        { "type": "target", "required": true },
+        { "type": "word", "options": ["hide", "reset"] },
+        
+        { "type": "word", "options": [
+          "all",
+          "armor",
+          "air_bubbles",
+          "crosshair",
+          "horse_health",
+          "hotbar",
+          "health",
+          "hunger",
+          "progress_bar",
+          "tooltips",
+          "touch_controls",
+          "paperdoll"
+        ],
+          "required": false }
+      ]
+    }
+  ]
+}
