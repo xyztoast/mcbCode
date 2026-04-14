@@ -1,0 +1,21 @@
+{
+    "command": "inputpermission",
+    "overloads": [
+        {
+            "pattern": [
+                { "type": "word", "options": ["query"] }
+                { "type": "target" },
+                { "type": "word", "options": ["*"] },
+                { "type": "word", "options": ["true", "false"] }
+            ]
+        },
+        {
+            "pattern": [
+                { "type": "word", "options": ["set"] }
+                { "type": "target" },
+                { "type": "word", "options": ["*"] },
+                { "type": "word", "options": ["true", "false"] }
+            ]
+        }
+    ]
+}
