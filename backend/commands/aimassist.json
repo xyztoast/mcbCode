@@ -1,0 +1,18 @@
+{
+  "command": "aimassist",
+  "overloads": [
+    {
+      "pattern": [
+        { "type": "target", "required": true },
+        { "type": "word", "options": ["*"] },
+      ]
+    },
+    {
+      "description": "fill, with blockstates, replace",
+      "pattern": [
+        { "type": "word", "required": true, "options": ["clear"] },
+        { "type": "target", "required": true }
+      ]
+    }
+  ]
+}
