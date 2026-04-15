@@ -1,0 +1,7 @@
+{
+  "command": "stopsound",
+  "pattern": [
+    { "type": "target", "required": true },
+    { "type": "word", "required": true, "options": ["*"] }
+  ]
+}
