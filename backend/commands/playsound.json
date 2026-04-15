@@ -1,0 +1,13 @@
+{
+  "command": "playsound",
+  "pattern": [
+    { "type": "word", "options": ["*"] },
+    { "type": "target" },
+    { "type": "int" },
+    { "type": "int" },
+    { "type": "int" },
+    { "type": "int" },
+    { "type": "int" },
+    { "type": "int" }
+  ]
+}
