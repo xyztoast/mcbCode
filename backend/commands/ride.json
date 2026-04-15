@@ -40,8 +40,8 @@
         { "type": "target" },
         { "type": "word", "options": ["summon_rider"] },
         { "type": "word", "options": ["*"] },
-        { "type": "string" },
-        { "type": "string" }
+        { "type": "word", "options": ["*"] },
+        { "type": "word", "options": ["*"] }
       ]
     }
   ]
