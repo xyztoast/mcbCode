@@ -1,0 +1,22 @@
+{
+  "command": "summon",
+  "overloads": [
+    {
+      "description": "summon entity with position, event, and nametag",
+      "pattern": [
+        { "type": "word", "options": ["*"] },
+        { "type": "int" }, { "type": "int" }, { "type": "int" },
+        { "type": "word", "options": ["*"] },
+        { "type": "word", "options": ["*"] }
+      ]
+    },
+    {
+      "description": "summon entity with nametag and position",
+      "pattern": [
+        { "type": "word", "options": ["*"] },
+        { "type": "word", "options": ["*"] },
+        { "type": "int" }, { "type": "int" }, { "type": "int" }
+      ]
+    }
+  ]
+}
