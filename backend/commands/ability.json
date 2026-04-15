@@ -1,0 +1,8 @@
+{
+  "command": "ability",
+  "pattern": [
+    { "type": "target", "required": true },
+    { "type": "word", "options": ["*"] },
+    { "type": "word" }
+  ]
+}
