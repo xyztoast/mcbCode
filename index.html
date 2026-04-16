@@ -133,9 +133,23 @@
       margin-top: 50px;
   }
 
-  footer { color: #343434; }
-  footer g { color: #008e4c; }
+  footer {
+    color: #bebebe;
+    background-color: #232323;
+    padding: 8px;
+    }
 
+  footer g {
+    color: #008e4c;
+    }
+
+  .pages-list {
+    display: flex;
+    padding: 4px 8px;
+    margin-left: 5%;
+    margin-right: 5%;
+    gap: 10%;
+  }
   /* demo editor */
   .demo-section {
       display: flex;
@@ -439,9 +453,17 @@ say Hello from mcbCode!</textarea>
 
   <br><br><br><br><br>
 
-  <footer>Not affiliated with Microsoft or Mojang AB.<br><br>
-  © Copyright 2026 mcb<g>Code</g></footer>
+  <footer>
+    <div class="pages-list">
+      <p>Tools</p>
+      <p>Legal Stuff</p>
+      <p>External Stuff</p>
+    </div>
   <br><br>
+Not affiliated with Microsoft or Mojang AB.<br><br>
+© Copyright 2026 mcb<g>Code</g>
+  <br><br>
+  </footer>
 
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
