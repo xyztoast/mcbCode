@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<link rel="manifest" href="/app/manifest.json">
+<!-- Import Fira Code -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://mcbcode.com/theme/site.css">
+<!-- External Theme Link -->
+<link id="theme-link" rel="stylesheet" href="https://mcbcode.com/theme/editor/default.css">
+<meta charset="UTF-8">
+<link rel="icon" href="/theme/favicon.png">
+<title>Editor | mcbCode</title>
+<style>
+  body {
+    margin: 0;
+    background-color: #323232;
+    font-weight: 0 !important; 
+    color: #fff;
+    overflow: hidden;
+    font-family: mcfont;
+  }
+
+  header.top-thing {
+    background-color: #323232;
+    display: flex; 
+    align-items: center; 
+    height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+  }
+
+  .navi {
+    font-size: 14px;
+    padding: 3px 3px;
+    user-select: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    background-color: #323232;
+    z-index: 1001;
+    border-bottom: 1px solid #444;
+  }
+
+  .editor {
+    display: flex;
+    height: calc(100vh - 80px); 
+    overflow: hidden;
+    align-items: flex-start;
+    position: relative;
+    background-color: #0c0c0c;
+    margin-top: 80px; /* Offset for fixed top elements */
+  }
+
+  .sidebar {
+    background-color: #323232;
+    width: 60px;
+    height: 110%;
+    font-size: 12px;
+    padding: 6px 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Pushed content to bottom */
+    position: fixed;
+    top: -11%;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+
+  .nav-left, .nav-right {
+    display: flex;
+    gap: 0px;
+    align-items: center;
+    padding-top: 1px
+  }
+
+  .nav-left img {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    padding-top: 1px
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    color: #f0f0f0;
+    user-select: none;
+    margin: 0;
+    cursor: pointer;
+    font-family: mcfont;
+  }
+
+  .code-container {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+    margin: 10px; /* Offset for fixed sidebar */
+  }
+
+  /* EXTREME OVERRIDE: 
+     We use double ID selectors to beat site.css specificity.
+     We also disable ligatures and kerning to ensure pixel-perfect character alignment.
+  */
+  #editor #codeArea, 
+  #editor #highlightLayer,
+  #editor #highlightLayer * {
+    font-family: 'Fira Code', monospace !important; 
+    font-variant-ligatures: none !important;
+    font-feature-settings: "liga" 0, "calt" 0 !important;
+    letter-spacing: normal !important;
+    line-height: 1.4 !important;
+    font-size: 16px !important;
+    white-space: pre !important;
+    word-wrap: normal !important;
+    tab-size: 4 !important;
+  }
+
+  .code-container textarea#codeArea, 
+  .code-container div#highlightLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 4px; /* Added some padding for better readability */
+    margin: 0;
+    border: none;
+    outline: none;
+    box-sizing: border-box;
+    overflow: auto;
+  }
+
+  .code-area {
+    z-index: 2;
+    background: transparent !important;
+    color: #bebebe !important;
+    caret-color: #05ee93 !important;
+    resize: none;
+  }
+
+  .highlight-layer {
+    z-index: 1;
+    background-color: #0c0c0c;
+    pointer-events: none; 
+  }
+
+  .nav-item {
+    position: relative;
+    display: inline-block;
+  }
+
+  .nav-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #212425;
+    border: 1px solid #bebebe;
+    min-width: 250px;
+    z-index: 1002;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    flex-direction: column;
+  }
+
+  .nav-dropdown div {
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .nav-dropdown div:hover {
+    background-color: #454545;
+  }
+
+  .nav-item:hover .nav-dropdown {
+    display: flex;
+  }
+
+  .sub-dropdown {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 95%;
+    border: 1px solid #bebebe;
+    min-width: 120px;
+    background-color: #323232;
+    z-index: 1003;
+  }
+
+  .has-submenu:hover .sub-dropdown {
+    display: block;
+  }
+
+  #exportCode { color: #00b2ff; }
+  .delete { color: #ff4d4d; }
+  
+  .file-name {
+    background-color: #0c0c0c;
+    color: #ffffff;
+    white-space: nowrap;
+    height: 18px;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    padding: 6px 2px;
+    resize: none;
+    min-width: 10%;
+    line-height: 18px;
+    overflow-y: hidden
+  }
+
+  .filename-txt { background-color: #454545; padding: 6px 6px; padding-right: 12px; }
+  .filename-mcf { background-color: #1f1f1f; padding: 6px 6px; }
+
+  .copyshortcut {
+    transition: background-color 0.2s ease-in-out;
+    background-color: #1f1f1f;
+    width: 18px;
+    padding: 6px 6px; margin-left: 8px;
+  }
+
+  .copyshortcut:hover { background-color: #454545; cursor: pointer; }
+
+  kbs { background-color: #454545; padding: 3px 3px; }
+
+  .find-panel-wrapper {
+    background-color: rgba(50, 50, 50, 0.25);
+    backdrop-filter: blur(5px);
+    padding: 4px 8px;
+    position: fixed;
+    top: 100px;
+    z-index: 1050;
+    right: 30px;
+    /* Fade effects */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+  }
+
+  #findthing {
+    resize: none;
+    background-color: #0c0c0c;
+    outline: none;
+    border: none;
+    color: #ffffff;
+    height: 180px;
+  }
+
+</style>
+</head>
+<body>
+
+  <div class="find-panel-wrapper">
+    <p>Find Tool</p>
+    <textarea id="findthing"></textarea>
+  </div>
+
+  <header class="top-thing">
+      <a href="https://mcbcode.com" style="padding-left: 12px;"><img src="https://mcbcode.com/theme/favicon.png" alt="icon" style="width: 36px"></a>
+      <h2 style="padding: 0px 12px;">mcb<g>Code</g></h2>
+      <div class="filename-txt">Filename:</div>
+      <div class="filename-mcf">manifest.json</div>
+      <div class="copyshortcut" id="copyCodeTop"><img style="width: 16px; height: 16px" src="https://ccvaults.com/thumbnails/10.%20Items/15.%20Projectiles/Ender_Pearl.png" alt="copy"></div>
+  </header>
+
+  <div class="navi">
+    <div class="nav-left">
+      <div class="nav-item">
+        <button>File</button>
+        <div class="nav-dropdown">
+          <div id="copyCodeMenu"><img src="https://ccvaults.com/thumbnails/10.%20Items/15.%20Projectiles/Ender_Pearl.png" style="width: 16px; height: 16px; padding-right: 4px;">Copy Code</div>
+          <div id="exportCode"><img src="https://ccvaults.com/thumbnails/10.%20Items/11.%20Materials/Diamond.png" style="width: 16px; height: 16px; padding-right: 4px;">Export as .mcfunction</div>
+          <div id="exportCodeTxt"><img src="https://ccvaults.com/thumbnails/10.%20Items/11.%20Materials/Emerald.png" style="width: 16px; height: 16px; padding-right: 4px;"><g>Export as .txt</g></div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button>Edit</button>
+        <div class="nav-dropdown">
+          <div id="colorFormat"><img src="https://ccvaults.com/thumbnails/10.%20Items/21.%20Decoration/Amethyst_Cluster.png" style="width: 16px; height: 16px; padding-right: 4px;">Color Format
+            <div class="sub-dropdown" id="colorMenu">
+              <div data-code="§0">§0 - Black</div>
+              <div data-code="§1">§1 - Dark Blue</div>
+              <div data-code="§2">§2 - Dark Green</div>
+              <div data-code="§3">§3 - Dark Aqua</div>
+              <div data-code="§4">§4 - Dark Red</div>
+              <div data-code="§5">§5 - Dark Purple</div>
+              <div data-code="§6">§6 - Gold</div>
+              <div data-code="§7">§7 - Gray</div>
+              <div data-code="§8">§8 - Dark Gray</div>
+              <div data-code="§9">§9 - Blue</div>
+              <div data-code="§a">§a - Green</div>
+              <div data-code="§b">§b - Aqua</div>
+              <div data-code="§c">§c - Red</div>
+              <div data-code="§d">§d - Light Purple</div>
+              <div data-code="§e">§e - Yellow</div>
+              <div data-code="§f">§f - White</div>
+              <div data-code="§g">§g - Gold</div>
+              <div data-code="§k">§k - Obfuscated</div>
+              <div data-code="§l">§l - Bold</div>
+              <div data-code="§o">§o - Italic</div>
+              <div data-code="§r">§r - Reset</div>
+            </div>
+          </div>
+         <div id="deleteCode" class="delete"><img src="https://ccvaults.com/thumbnails/10.%20Items/19.%20Buckets/Lava_Bucket.png" style="width: 16px; height: 16px; padding-right: 4px;">Delete Code</div>
+        </div>
+      </div>
+      <div class="nav-item">
+        <button>View</button>
+        <div class="nav-dropdown">
+          <div class="has-submenu">
+            <img src="https://ccvaults.com/thumbnails/10.%20Items/18.%20Consumables/Enchanted_Golden_Apple.png" style="width: 16px; height: 16px; padding-right: 4px;">Themes
+            <div class="sub-dropdown">
+              <div class="theme-btn" onclick="setTheme('default')">Default</div>
+              <div class="theme-btn" onclick="setTheme('neon')">Neon</div>
+              <div class="theme-btn" onclick="setTheme('blue')">Blue</div>
+              <div class="theme-btn" onclick="setTheme('soft')">Soft</div>
+              <div class="theme-btn" onclick="setTheme('grayscale')">Grayscale</div>
+              <div class="theme-btn" onclick="setTheme('solid')">Solid</div>
+            </div>
+          </div>   
+        </div>
+      </div>
+      <div class="nav-item">
+        <button>Help</button>
+        <div class="nav-dropdown" style="width: 225px;">
+          <div class="has-submenu"><img src="https://ccvaults.com/thumbnails/20.%20Blocks/18.%20Decoration/Dirt.png" style="width: 16px; height: 16px; padding-right: 4px;">Third Party Sites
+            <div class="sub-dropdown">
+              <a href="https://minecraft.wiki/w/Commands" target="_blank" style="text-decoration: none; color: #ffffff"><div>Open minecraft.wiki</div></a>
+              <a href="https://wiki.bedrock.dev/commands/intro-to-command-blocks" target="_blank" style="text-decoration: none; color: #ffffff"><div>Open wiki.bedrock.dev</div></a>
+            </div>
+          </div>
+          <div class="has-submenu">
+            <img src="https://ccvaults.com/thumbnails/20.%20Blocks/22.%20Redstone/Sticky_Piston.png" style="width: 16px; height: 16px; padding-right: 4px;">Keyboard Shortcuts
+            <div class="sub-dropdown" style="padding: 10px; font-size: 11px;">
+              <p><kbs>Ctrl+C</kbs> Copy</p>
+              <p><kbs>Ctrl+V</kbs> Paste</p>
+              <p><kbs>Ctrl+Z</kbs> Undo</p>
+              <p><kbs>Ctrl+S</kbs> Download</p>
+              <p><kbs>Ctrl+F</kbs> Find</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="editor" id="editor">
+
+    <div class="code-container">
+      <textarea class="code-area" id="codeArea" spellcheck="false">idk</textarea>
+    </div>
+  </div>
+
+
+<script data-goatcounter="https://mcbcode.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
