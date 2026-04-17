@@ -12,4 +12,4 @@ i'm moving development here to keep things organized as i add more.
 *   **Welcome Site:** [hello.mcbcode.com](https://hello.mcbcode.com) ("Portfolio" I guess)
 
 ## why this exists
-writing bedrock commands in a standard text editor is annoying. having to load a minecraft world to test one command gets annoying. this editor was built from scratch, making it easier for map makers and addon creators to script worlds without the constant syntax errors.
+writing bedrock commands in a standard text editor is annoying. having to load a minecraft world to test one command gets annoying. this editor was built from scratch, making it easier for map makers and addon creators to script worlds without the constant syntax errors and testing.
