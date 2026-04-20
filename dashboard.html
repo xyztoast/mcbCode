@@ -352,7 +352,26 @@
     input[type="checkbox"]:checked {
       background-color: #05ee93;
     }
+    #customTheme {
+      background-color: #323232;
+      border: none;
+      outline: none;
+      padding: 4px;
+      color: #bebebe;
+    }
 
+    .save-btn {
+      padding: 6px 8px;
+      background-color: #05ee93;
+      border: none;
+      outline: none;
+      font-size: 18px;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .save-btn:hover {
+      background-color: #78e3a6;
+    }
   </style>
 </head>
 <body>
@@ -449,13 +468,13 @@
         <p>Configure settings. It's tied to your account.</p>
         <br><br>
           <h3>Personalization</h3>
-          <br
-/""          <div style="display: flex; gap: 8px;">
+          <br>
+          <div style="display: flex; gap: 8px;">
           <input name="Font" type="checkbox" checked><div for="Font" type="text">Use Mojangles Font</div>
           </div>
           <br>
           <div style="display: flex; gap: 8px;">
-          <input name="darkMode" type="checkbox" checked><div for="darkMode" type="text">Use Dark Mode</div>
+          <input name="darkMode" type="checkbox"><div for="darkMode" type="text">Use Light Mode</div>
           </div>
           <br>
           <div style="display: flex; gap: 8px;">
@@ -465,8 +484,16 @@
             <option value="neon">Neon</option> 
             <option value="blue">Blue</option> 
             <option value="grayscale">Grayscale</option> 
-            <option value="Solid">Solid</option> 
+            <option value="Solid">Solid</option>
+            </select>
           </div>
+          <br>
+          <div style="display: flex; gap: 8px;">
+          <div for="darkMode" type="text">Custom Theme Upload</div>
+          <input name="customTheme" id="customTheme"></input>
+          </div>
+          <br>
+          <button class="save-btn">Save</button>
       </div>
     </div>
   </div>
