@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mcbcode.com/account">
+  <meta property="og:title" content="mcbCode — Account">
+  <meta property="og:description" content="Sign in or create your mcbCode account">
+  <meta property="og:image" content="https://mcbcode.com/theme/favicon.png">
+  <meta property="og:site_name" content="mcbCode">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="https://mcbcode.com/theme/favicon.png">
+  <link rel="stylesheet" href="https://mcbcode.com/theme/site.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>mcbCode — Account</title>
+  <style>
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      font-family: 'mcfont', sans-serif;
+      background: #0c0c0c;
+      color: #bebebe;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 25px;
+      color: #ffffff;
+    }
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      transition: color 0.2s ease-in-out;
+    }
+
+    a:hover {
+      color: #05ee93;
+    }
+
+    button {
+      text-align: center;
+      background-color: #313131;
+      border: none;
+      font-size: 18px;
+      border-radius: 12px;
+      padding: 8px 12px;
+      color: #ffffff;
+      transition: color 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    button:hover {
+      color: #05ee93;
+    }
+
+    .navi {
+      position: fixed;
+      top: 0;
+      max-width: 100%;
+      width: 100%;
+      height: 75px;
+      background-color: rgba(45, 45, 45, 0.6);
+      backdrop-filter: blur(6px);
+      display: flex;
+      z-index: 100;
+    }
+
+    .quick-links {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      max-width: 700px;
+      width: 700px;
+      text-align: center;
+      margin: auto;
+    }
+
+    g {
+      color: #05ee93;
+    }
+
+    c {
+      color: #e7007b;
+    }
+
+    /* account card */
+    .account-card {
+      background: #1a1a1a;
+      border: 2px solid #2e2e2e;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      margin: 120px auto 60px;
+      padding: 36px 32px;
+      box-sizing: border-box;
+    }
+
+    .account-card h1 {
+      font-family: 'mcfontb', sans-serif;
+      font-size: 28px;
+      color: #ffffff;
+      margin: 0 0 8px;
+    }
+
+    .account-card p.subtitle {
+      font-size: 14px;
+      color: #888;
+      margin: 0 0 28px;
+    }
+
+    /* tabs */
+    .tabs {
+      display: flex;
+      background: #111;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 15px;
+      padding: 8px;
+      color: #888;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab-btn:hover {
+      color: #ffffff;
+    }
+
+    .tab-btn.active {
+      background: #2e2e2e;
+      color: #ffffff;
+    }
+
+    /* form */
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: #111;
+      border: 2px solid #2e2e2e;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-family: 'mcfont', sans-serif;
+      color: #ffffff;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: #05ee93;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #05ee93;
+      color: #0c0c0c;
+      border: 3px solid #00a459;
+      border-radius: 12px;
+      font-size: 16px;
+      padding: 11px;
+      margin-top: 8px;
+      cursor: pointer;
+      font-family: 'mcfont', sans-serif;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: #00c97a;
+      color: #ffffff;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* message */
+    .msg {
+      font-size: 13px;
+      margin-top: 14px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      display: none;
+    }
+
+    .msg.error {
+      background: #2a0f0f;
+      border: 1px solid #ff5555;
+      color: #ff5555;
+      display: block;
+    }
+
+    .msg.success {
+      background: #0a2a1a;
+      border: 1px solid #05ee93;
+      color: #05ee93;
+      display: block;
+    }
+
+    .divider-text {
+      font-size: 12px;
+      color: #444;
+      margin-top: 20px;
+    }
+
+    footer {
+      color: #343434;
+      margin-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    footer g {
+      color: #008e4c;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navi">
+    <div style="text-align: left; padding-left: 20px;"><h2>mcb<g>Code</g></h2></div>
+    <div class="quick-links">
+      <a href="https://mcbcode.com/editor">Editor</a>
+      <div style="padding-left: 60%"></div>
+      <a href="https://github.com/xyztoast/mcfunction">Source</a>
+      <div style="padding-left: 60%"></div>
+    </div>
+  </div>
+
+  <div class="account-card">
+    <h1>mcb<g>Code</g></h1>
+    <p class="subtitle">Sign in or create an account</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Sign Up</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="form-login">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button class="submit-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="msg" id="login-msg"></div>
+    </div>
+
+    <!-- Register form -->
+    <div id="form-register" style="display:none;">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="reg-password" placeholder="At least 8 characters" autocomplete="new-password" />
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="reg-confirm" placeholder="••••••••" autocomplete="new-password" />
+      </div>
+      <button class="submit-btn" id="reg-btn" onclick="doRegister()">Create Account</button>
+      <div class="msg" id="reg-msg"></div>
+    </div>
+
+    <p class="divider-text">mcbCode accounts are free forever</p>
+  </div>
+
+  <footer>
+    Not affiliated with Microsoft or Mojang AB.<br><br>
+    © Copyright 2026 mcb<g>Code</g>
+  </footer>
+
+  <script>
+    const AUTH = "https://auth.mcbcode.com";
+
+    // redirect if already logged in
+    (async () => {
+      try {
+        const res = await fetch(`${AUTH}/me`, { credentials: "include" });
+        if (res.ok) window.location.href = "/dashboard";
+      } catch {}
+    })();
+
+    function switchTab(tab) {
+      const isLogin = tab === "login";
+      document.getElementById("form-login").style.display = isLogin ? "" : "none";
+      document.getElementById("form-register").style.display = isLogin ? "none" : "";
+      document.getElementById("tab-login").classList.toggle("active", isLogin);
+      document.getElementById("tab-register").classList.toggle("active", !isLogin);
+      clearMsgs();
+    }
+
+    function showMsg(id, text, type) {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = `msg ${type}`;
+    }
+
+    function clearMsgs() {
+      ["login-msg", "reg-msg"].forEach(id => {
+        const el = document.getElementById(id);
+        el.className = "msg";
+        el.textContent = "";
+      });
+    }
+
+    async function doLogin() {
+      const email = document.getElementById("login-email").value.trim();
+      const password = document.getElementById("login-password").value;
+      const btn = document.getElementById("login-btn");
+
+      if (!email || !password) return showMsg("login-msg", "Please fill in all fields.", "error");
+
+      btn.disabled = true;
+      btn.textContent = "Signing in...";
+
+      try {
+        const res = await fetch(`${AUTH}/login`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMsg("login-msg", "Signed in! Redirecting...", "success");
+          setTimeout(() => window.location.href = "/dashboard", 800);
+        } else {
+          showMsg("login-msg", data.error || "Something went wrong.", "error");
+          btn.disabled = false;
+          btn.textContent = "Sign In";
+        }
+      } catch {
+        showMsg("login-msg", "Could not reach auth server.", "error");
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+      }
+    }
+
+    async function doRegister() {
+      const email = document.getElementById("reg-email").value.trim();
+      const password = document.getElementById("reg-password").value;
+      const confirm = document.getElementById("reg-confirm").value;
+      const btn = document.getElementById("reg-btn");
+
+      if (!email || !password || !confirm) return showMsg("reg-msg", "Please fill in all fields.", "error");
+      if (password !== confirm) return showMsg("reg-msg", "Passwords do not match.", "error");
+      if (password.length < 8) return showMsg("reg-msg", "Password must be at least 8 characters.", "error");
+
+      btn.disabled = true;
+      btn.textContent = "Creating account...";
+
+      try {
+        const res = await fetch(`${AUTH}/register`, {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          showMsg("reg-msg", "Account created! Redirecting...", "success");
+          setTimeout(() => window.location.href = "/dashboard", 800);
+        } else {
+          showMsg("reg-msg", data.error || "Something went wrong.", "error");
+          btn.disabled = false;
+          btn.textContent = "Create Account";
+        }
+      } catch {
+        showMsg("reg-msg", "Could not reach auth server.", "error");
+        btn.disabled = false;
+        btn.textContent = "Create Account";
+      }
+    }
+
+    // allow enter key to submit
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const loginVisible = document.getElementById("form-login").style.display !== "none";
+      if (loginVisible) doLogin();
+      else doRegister();
+    });
+  </script>
+
+  <script data-goatcounter="https://mcbcode.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
