@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="https://mcbcode.com/theme/favicon.png">
+  <link rel="stylesheet" href="https://mcbcode.com/theme/site.css">
+  <title>mcbCode | Dashboard</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      background: #0c0c0c;
+      color: #bebebe;
+      font-family: 'mcfont', sans-serif;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      transition: color 0.2s;
+    }
+
+    a:hover { color: #05ee93; }
+
+    g { color: #05ee93; }
+    c { color: #e7007b; }
+
+    /* =====================
+       TOP NAV
+    ===================== */
+    .topnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(20, 20, 20, 0.85);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #1f1f1f;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 200;
+      gap: 16px;
+    }
+
+    .topnav-title {
+      font-size: 20px;
+      color: #ffffff;
+      font-family: 'mcfontb', sans-serif;
+    }
+
+    .topnav-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+
+    #user-email {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .logout-btn {
+      background: #1e1e1e;
+      border: 1px solid #2e2e2e;
+      color: #bebebe;
+      font-family: 'mcfont', sans-serif;
+      font-size: 13px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: #ff5555;
+      border-color: #ff5555;
+    }
+
+    /* toggle button */
+    .sidebar-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      color: #888;
+      font-size: 20px;
+      line-height: 1;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .sidebar-toggle:hover { color: #05ee93; }
+
+    /* =====================
+       LAYOUT
+    ===================== */
+    .layout {
+      display: flex;
+      margin-top: 56px;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* =====================
+       SIDEBAR
+    ===================== */
+    .sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: #111111;
+      border-right: 1px solid #1f1f1f;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 56px;
+      bottom: 0;
+      left: 0;
+      transition: width 0.25s ease, min-width 0.25s ease;
+      overflow: hidden;
+      z-index: 100;
+    }
+
+    .sidebar.collapsed {
+      width: 52px;
+      min-width: 52px;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      gap: 2px;
+      flex: 1;
+    }
+
+    /* each sidebar item */
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      color: #888;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background 0.15s, color 0.15s;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-item:hover {
+      background: #1a1a1a;
+      color: #ffffff;
+    }
+
+    .sidebar-item.active {
+      background: #1a1a1a;
+      color: #05ee93;
+      border-left-color: #05ee93;
+    }
+
+    .sidebar-item img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      image-rendering: pixelated;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .sidebar-item:hover img,
+    .sidebar-item.active img {
+      opacity: 1;
+    }
+
+    .sidebar-item span {
+      transition: opacity 0.2s;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed .sidebar-item span {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .sidebar.collapsed .sidebar-item {
+      padding: 10px 14px;
+      justify-content: center;
+    }
+
+    /* sidebar section label */
+    .sidebar-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #444;
+      padding: 16px 14px 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: opacity 0.2s;
+    }
+
+    .sidebar.collapsed .sidebar-label {
+      opacity: 0;
+    }
+
+    /* =====================
+       MAIN CONTENT
+    ===================== */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      transition: margin-left 0.25s ease;
+      padding: 40px 48px;
+      max-width: 100%;
+    }
+
+    .main.shifted {
+      margin-left: 52px;
+    }
+
+    /* =====================
+       SECTIONS
+       add new sections here easily — just copy .dash-section
+    ===================== */
+    .dash-section {
+      margin-bottom: 64px;
+      scroll-margin-top: 80px;
+    }
+
+    .dash-section h2 {
+      font-size: 22px;
+      color: #ffffff;
+      margin-bottom: 6px;
+      border-bottom: 1px solid #1f1f1f;
+      padding-bottom: 10px;
+    }
+
+    .dash-section p {
+      font-size: 14px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* placeholder card grid — use this pattern for content */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: #141414;
+      border: 1px solid #1f1f1f;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: #05ee93;
+    }
+
+    .card h3 {
+      color: #ffffff;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #555;
+      margin: 0;
+    }
+
+    /* stat row */
+    .stat-row {
+      display: flex;
+      gap: 16px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: #141414;
+      border: 1px solid #1f1f1f;
+      padding: 20px 28px;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      color: #05ee93;
+      font-family: 'mcfontb', sans-serif;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    /* empty state */
+    .empty {
+      margin-top: 20px;
+      padding: 40px;
+      background: #111;
+      border: 1px dashed #2a2a2a;
+      text-align: center;
+      color: #444;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <div class="topnav">
+    <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">&#9776;</button>
+    <span class="topnav-title">mcb<g>Code</g></span>
+    <div class="topnav-right">
+      <span id="user-email"></span>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+
+        <!-- SECTION: Main -->
+        <div class="sidebar-label">Main</div>
+
+        <!-- TO ADD A NEW TAB: copy one .sidebar-item block, change the data-target to match your new section id -->
+        <div class="sidebar-item active" data-target="section-home" onclick="navTo(this)">
+          <img src="https://mcbcode.com/theme/favicon.png" alt="">
+          <span>Home</span>
+        </div>
+
+        <div class="sidebar-item" data-target="section-projects" onclick="navTo(this)">
+          <img src="https://mcbcode.com/theme/favicon.png" alt="">
+          <span>Projects</span>
+        </div>
+
+        <!-- SECTION: Tools -->
+        <div class="sidebar-label">Tools</div>
+
+        <div class="sidebar-item" data-target="section-editor" onclick="navTo(this)">
+          <img src="https://mcbcode.com/theme/favicon.png" alt="">
+          <span>Editor</span>
+        </div>
+
+        <div class="sidebar-item" data-target="section-settings" onclick="navTo(this)">
+          <img src="https://mcbcode.com/theme/favicon.png" alt="">
+          <span>Settings</span>
+        </div>
+
+      </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main" id="main">
+
+      <!-- HOME SECTION -->
+      <!-- TO ADD A NEW SECTION: copy this .dash-section block, give it a new id, add a matching sidebar-item above -->
+      <div class="dash-section" id="section-home">
+        <h2>Home</h2>
+        <p>Welcome back to mcb<g>Code</g>.</p>
+
+        <div class="stat-row">
+          <div class="stat">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Projects</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Commands Written</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">0</div>
+            <div class="stat-label">Files Saved</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS SECTION -->
+      <div class="dash-section" id="section-projects">
+        <h2>Projects</h2>
+        <p>Your saved mcfunction projects will appear here.</p>
+        <div class="empty">No projects yet. Open the editor to get started.</div>
+      </div>
+
+      <!-- EDITOR SECTION -->
+      <div class="dash-section" id="section-editor">
+        <h2>Editor</h2>
+        <p>Quick access to the mcbCode editor.</p>
+        <div class="card-grid">
+          <div class="card" onclick="window.location.href='/editor'" style="cursor:pointer">
+            <h3>Open Editor</h3>
+            <p>Launch the mcfunction code editor</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS SECTION -->
+      <div class="dash-section" id="section-settings">
+        <h2>Settings</h2>
+        <p>Account settings and preferences.</p>
+        <div class="empty">Settings coming soon.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const AUTH = "https://auth.mcbcode.com";
+
+    // auth check — redirect to /account if not signed in
+    (async () => {
+      try {
+        const res = await fetch(`${AUTH}/me`, { credentials: "include" });
+        if (!res.ok) return window.location.href = "/account";
+        const data = await res.json();
+        document.getElementById("user-email").textContent = data.email;
+      } catch {
+        window.location.href = "/account";
+      }
+    })();
+
+    // sidebar toggle
+    let collapsed = false;
+
+    function toggleSidebar() {
+      collapsed = !collapsed;
+      document.getElementById("sidebar").classList.toggle("collapsed", collapsed);
+      document.getElementById("main").classList.toggle("shifted", collapsed);
+    }
+
+    // sidebar navigation — scrolls to section and marks active
+    function navTo(el) {
+      document.querySelectorAll(".sidebar-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+      const target = document.getElementById(el.dataset.target);
+      if (target) target.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // logout
+    async function doLogout() {
+      await fetch(`${AUTH}/logout`, { method: "POST", credentials: "include" });
+      window.location.href = "/account";
+    }
+  </script>
+
+  <script data-goatcounter="https://mcbcode.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
