@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -367,6 +368,7 @@
       font-size: 14px;
     }
 
+    /* settings save feedback */
     .save-msg {
       font-size: 13px;
       margin-left: 10px;
@@ -375,75 +377,6 @@
 
     .save-msg.ok  { color: #05ee93; display: inline; }
     .save-msg.err { color: #ff5555; display: inline; }
-
-    /* projects list */
-    .project-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .project-row {
-      display: flex;
-      align-items: center;
-      background: #141414;
-      border: 1px solid #1f1f1f;
-      padding: 12px 16px;
-      gap: 16px;
-      transition: border-color 0.2s;
-    }
-
-    .project-row:hover {
-      border-color: #2e2e2e;
-    }
-
-    .project-name {
-      color: #ffffff;
-      font-size: 15px;
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .project-name span {
-      color: #05ee93;
-    }
-
-    .project-date {
-      font-size: 12px;
-      color: #444;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .project-actions {
-      display: flex;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .proj-btn {
-      background: #1e1e1e;
-      border: 1px solid #2e2e2e;
-      color: #bebebe;
-      font-family: 'mcfont', sans-serif;
-      font-size: 12px;
-      padding: 4px 10px;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s;
-    }
-
-    .proj-btn:hover {
-      color: #05ee93;
-      border-color: #05ee93;
-    }
-
-    .proj-btn.copied {
-      color: #05ee93;
-      border-color: #05ee93;
-    }
   </style>
 </head>
 <body>
@@ -496,7 +429,7 @@
         <p>Welcome back to mcb<g>Code</g>.</p>
         <div class="stat-row">
           <div class="stat">
-            <div class="stat-value" id="stat-projects">0</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">Projects</div>
           </div>
           <div class="stat">
@@ -508,10 +441,8 @@
 
       <div class="dash-section" id="section-projects">
         <h2>Projects</h2>
-        <p>Your saved mcfunction projects.</p>
-        <div class="project-list" id="project-list">
-          <div class="empty" id="projects-empty">Loading...</div>
-        </div>
+        <p>Your saved mcfunction projects will appear here.</p>
+        <div class="empty">No projects yet. Open the editor to get started.</div>
       </div>
 
       <div class="dash-section" id="section-editor">
@@ -566,18 +497,38 @@
     </div>
   </div>
 
-  <script>
+<script>
     const AUTH = "https://auth.mcbcode.com";
 
-    // auth check + load settings + load projects
+    // auth check + load settings on page load
     (async () => {
+      const localToken = localStorage.getItem('mcbcode_token');
+
       try {
         const res = await fetch(`${AUTH}/me`, { credentials: "include" });
-        if (!res.ok) return window.location.href = "/account";
-        const data = await res.json();
-        document.getElementById("user-email").textContent = data.email;
+        
+        if (!res.ok) {
+          // If server auth fails, check if we have a GitHub token
+          if (localToken) {
+            console.log("Using GitHub Session");
+            // Fetch GitHub info to fill the email field since the auth server failed
+            const ghRes = await fetch('https://api.github.com/user', {
+                headers: { 'Authorization': `token ${localToken}` }
+            });
+            const ghData = await ghRes.json();
+            document.getElementById("user-email").textContent = ghData.login + " (GitHub)";
+          } else {
+            // No cookie AND no GitHub token? Go back to login.
+            return window.location.href = "/account";
+          }
+        } else {
+          // Normal server auth worked
+          const data = await res.json();
+          document.getElementById("user-email").textContent = data.email;
+        }
       } catch {
-        return window.location.href = "/account";
+        // If server is down, only redirect if we don't have a GitHub token
+        if (!localToken) return window.location.href = "/account";
       }
 
       // load settings
@@ -585,98 +536,13 @@
         const res = await fetch(`${AUTH}/settings`, { credentials: "include" });
         if (res.ok) {
           const { settings } = await res.json();
-          document.getElementById("s-font").checked    = settings.use_mojangles_font;
-          document.getElementById("s-light").checked   = settings.use_light_mode;
-          document.getElementById("s-theme").value     = settings.editor_theme;
+          document.getElementById("s-font").checked  = settings.use_mojangles_font;
+          document.getElementById("s-light").checked = settings.use_light_mode;
+          document.getElementById("s-theme").value   = settings.editor_theme;
           document.getElementById("customTheme").value = settings.custom_theme;
         }
       } catch {}
-
-      // load projects
-      await loadProjects();
     })();
-
-    function formatDate(str) {
-      if (!str) return "";
-      const d = new Date(str + "Z"); // D1 stores UTC without Z, add it
-      return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
-           + " " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-    }
-
-    async function loadProjects() {
-      const list = document.getElementById("project-list");
-      const empty = document.getElementById("projects-empty");
-
-      try {
-        const res = await fetch(`${AUTH}/saves`, { credentials: "include" });
-        if (!res.ok) throw new Error();
-        const { saves } = await res.json();
-
-        // update home stat
-        document.getElementById("stat-projects").textContent = saves.length;
-
-        if (saves.length === 0) {
-          empty.textContent = "No projects yet. Open the editor to get started.";
-          empty.style.display = "flex";
-          return;
-        }
-
-        empty.style.display = "none";
-
-        // render each save as a project row
-        saves.forEach(save => {
-          const filename = save.filename || "untitled";
-          const row = document.createElement("div");
-          row.className = "project-row";
-
-          row.innerHTML = `
-            <div class="project-name">${escHtml(filename)}<span>.mcfunction</span></div>
-            <div class="project-date">${formatDate(save.last_updated)}</div>
-            <div class="project-actions">
-              <button class="proj-btn" onclick="openProject('${escHtml(save.save_id)}')">Open</button>
-              <button class="proj-btn" id="copy-${escHtml(save.save_id)}" onclick="copyCode('${escHtml(save.save_id)}', this)">Copy Code</button>
-            </div>
-          `;
-
-          list.appendChild(row);
-        });
-
-      } catch {
-        empty.textContent = "Could not load projects.";
-        empty.style.display = "flex";
-      }
-    }
-
-    function openProject(saveId) {
-      window.location.href = `/editor?save=${saveId}`;
-    }
-
-    async function copyCode(saveId, btn) {
-      try {
-        const res = await fetch(`${AUTH}/save?id=${saveId}`, { credentials: "include" });
-        if (!res.ok) throw new Error();
-        const { content } = await res.json();
-        await navigator.clipboard.writeText(content);
-        btn.textContent = "Copied!";
-        btn.classList.add("copied");
-        setTimeout(() => {
-          btn.textContent = "Copy Code";
-          btn.classList.remove("copied");
-        }, 2000);
-      } catch {
-        btn.textContent = "Error";
-        setTimeout(() => { btn.textContent = "Copy Code"; }, 2000);
-      }
-    }
-
-    function escHtml(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
 
     async function saveSettings() {
       const btn = document.getElementById("save-btn");
@@ -693,7 +559,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             use_mojangles_font: document.getElementById("s-font").checked,
-            use_light_mode:     document.getElementById("s-light").checked,
+            use_light_mode:      document.getElementById("s-light").checked,
             editor_theme:       document.getElementById("s-theme").value,
             custom_theme:       document.getElementById("customTheme").value,
           })
@@ -732,11 +598,15 @@
     }
 
     async function doLogout() {
-      await fetch(`${AUTH}/logout`, { method: "POST", credentials: "include" });
+      // Clear GitHub token
+      localStorage.removeItem('mcbcode_token');
+      // Clear Server session
+      try {
+          await fetch(`${AUTH}/logout`, { method: "POST", credentials: "include" });
+      } catch {}
       window.location.href = "/account";
     }
   </script>
-
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
