@@ -187,6 +187,29 @@
       cursor: not-allowed;
     }
 
+    /* GitHub Button Style */
+    .github-btn {
+      width: 100%;
+      background: #24292e;
+      color: #ffffff;
+      border: 2px solid #444;
+      font-size: 16px;
+      padding: 11px;
+      margin-top: 12px;
+      cursor: pointer;
+      font-family: 'mcfont', sans-serif;
+      transition: background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .github-btn:hover {
+      background: #333;
+      border-color: #05ee93;
+    }
+
     /* message */
     .msg {
       font-size: 13px;
@@ -247,7 +270,6 @@
       <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Sign Up</button>
     </div>
 
-    <!-- Login form -->
     <div id="form-login">
       <div class="form-group">
         <label>Email</label>
@@ -258,10 +280,14 @@
         <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
       </div>
       <button class="submit-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      
+      <button class="github-btn" onclick="window.location.href='https://github.com/login/oauth/authorize?Ov23liveHrlFrvFZgW13&scope=user:email'">
+        Login with GitHub
+      </button>
+
       <div class="msg" id="login-msg"></div>
     </div>
 
-    <!-- Register form -->
     <div id="form-register" style="display:none;">
       <div class="form-group">
         <label>Email</label>
@@ -276,6 +302,11 @@
         <input type="password" id="reg-confirm" placeholder="••••••••" autocomplete="new-password" />
       </div>
       <button class="submit-btn" id="reg-btn" onclick="doRegister()">Create Account</button>
+
+      <button class="github-btn" onclick="window.location.href='https://github.com/login/oauth/authorize?Ov23liveHrlFrvFZgW13&scope=user:email'">
+        Sign Up with GitHub
+      </button>
+
       <div class="msg" id="reg-msg"></div>
     </div>
 
