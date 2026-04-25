@@ -496,18 +496,38 @@
     </div>
   </div>
 
-  <script>
+<script>
     const AUTH = "https://auth.mcbcode.com";
 
     // auth check + load settings on page load
     (async () => {
+      const localToken = localStorage.getItem('mcbcode_token');
+
       try {
         const res = await fetch(`${AUTH}/me`, { credentials: "include" });
-        if (!res.ok) return window.location.href = "/account";
-        const data = await res.json();
-        document.getElementById("user-email").textContent = data.email;
+        
+        if (!res.ok) {
+          // If server auth fails, check if we have a GitHub token
+          if (localToken) {
+            console.log("Using GitHub Session");
+            // Fetch GitHub info to fill the email field since the auth server failed
+            const ghRes = await fetch('https://api.github.com/user', {
+                headers: { 'Authorization': `token ${localToken}` }
+            });
+            const ghData = await ghRes.json();
+            document.getElementById("user-email").textContent = ghData.login + " (GitHub)";
+          } else {
+            // No cookie AND no GitHub token? Go back to login.
+            return window.location.href = "/account";
+          }
+        } else {
+          // Normal server auth worked
+          const data = await res.json();
+          document.getElementById("user-email").textContent = data.email;
+        }
       } catch {
-        return window.location.href = "/account";
+        // If server is down, only redirect if we don't have a GitHub token
+        if (!localToken) return window.location.href = "/account";
       }
 
       // load settings
@@ -538,7 +558,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             use_mojangles_font: document.getElementById("s-font").checked,
-            use_light_mode:     document.getElementById("s-light").checked,
+            use_light_mode:      document.getElementById("s-light").checked,
             editor_theme:       document.getElementById("s-theme").value,
             custom_theme:       document.getElementById("customTheme").value,
           })
@@ -577,11 +597,15 @@
     }
 
     async function doLogout() {
-      await fetch(`${AUTH}/logout`, { method: "POST", credentials: "include" });
+      // Clear GitHub token
+      localStorage.removeItem('mcbcode_token');
+      // Clear Server session
+      try {
+          await fetch(`${AUTH}/logout`, { method: "POST", credentials: "include" });
+      } catch {}
       window.location.href = "/account";
     }
   </script>
-
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
