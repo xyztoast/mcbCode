@@ -319,145 +319,140 @@
   </footer>
 
 
-  <script>
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token');
+<script>
+  const AUTH = "https://auth.mcbcode.com";
 
-if (token) {
-    // 1. Save it immediately
-    localStorage.setItem('mcbcode_token', token);
-    // 2. Clear the URL so the token is hidden
+  // 1. HANDLE GITHUB REDIRECT IMMEDIATELY
+  const urlParams = new URLSearchParams(window.location.search);
+  const ghToken = urlParams.get('token');
+
+  if (ghToken) {
+    localStorage.setItem('mcbcode_token', ghToken);
     window.history.replaceState({}, document.title, "/account");
-}
-  </script>
-  <script>
-    const AUTH = "https://auth.mcbcode.com";
+    window.location.href = "/dashboard";
+  }
 
-    // redirect if already logged in
-    (async () => {
-      try {
-        const res = await fetch(`${AUTH}/me`, { credentials: "include" });
-        if (res.ok) window.location.href = "/dashboard";
-      } catch {}
-    })();
-
-    function switchTab(tab) {
-      const isLogin = tab === "login";
-      document.getElementById("form-login").style.display = isLogin ? "" : "none";
-      document.getElementById("form-register").style.display = isLogin ? "none" : "";
-      document.getElementById("tab-login").classList.toggle("active", isLogin);
-      document.getElementById("tab-register").classList.toggle("active", !isLogin);
-      clearMsgs();
+  // 2. CHECK IF ALREADY LOGGED IN (Either by Cookie or GitHub Token)
+  (async () => {
+    const localToken = localStorage.getItem('mcbcode_token');
+    
+    // If we have a local GitHub token, just go to dashboard
+    if (localToken) {
+      window.location.href = "/dashboard";
+      return;
     }
 
-    function showMsg(id, text, type) {
+    // Otherwise check the custom auth server
+    try {
+      const res = await fetch(`${AUTH}/me`, { credentials: "include" });
+      if (res.ok) window.location.href = "/dashboard";
+    } catch (e) {
+      console.log("Auth server unreachable, staying on login page.");
+    }
+  })();
+
+  // 3. UI FUNCTIONS
+  function switchTab(tab) {
+    const isLogin = tab === "login";
+    document.getElementById("form-login").style.display = isLogin ? "" : "none";
+    document.getElementById("form-register").style.display = isLogin ? "none" : "";
+    document.getElementById("tab-login").classList.toggle("active", isLogin);
+    document.getElementById("tab-register").classList.toggle("active", !isLogin);
+    clearMsgs();
+  }
+
+  function showMsg(id, text, type) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = `msg ${type}`;
+  }
+
+  function clearMsgs() {
+    ["login-msg", "reg-msg"].forEach(id => {
       const el = document.getElementById(id);
-      el.textContent = text;
-      el.className = `msg ${type}`;
-    }
-
-    function clearMsgs() {
-      ["login-msg", "reg-msg"].forEach(id => {
-        const el = document.getElementById(id);
+      if (el) {
         el.className = "msg";
         el.textContent = "";
+      }
+    });
+  }
+
+  async function doLogin() {
+    const email = document.getElementById("login-email").value.trim();
+    const password = document.getElementById("login-password").value;
+    const btn = document.getElementById("login-btn");
+    if (!email || !password) return showMsg("login-msg", "Please fill in all fields.", "error");
+
+    btn.disabled = true;
+    btn.textContent = "Signing in...";
+
+    try {
+      const res = await fetch(`${AUTH}/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
       });
-    }
-
-    async function doLogin() {
-      const email = document.getElementById("login-email").value.trim();
-      const password = document.getElementById("login-password").value;
-      const btn = document.getElementById("login-btn");
-
-      if (!email || !password) return showMsg("login-msg", "Please fill in all fields.", "error");
-
-      btn.disabled = true;
-      btn.textContent = "Signing in...";
-
-      try {
-        const res = await fetch(`${AUTH}/login`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
+      if (res.ok) {
+        showMsg("login-msg", "Signed in! Redirecting...", "success");
+        setTimeout(() => window.location.href = "/dashboard", 800);
+      } else {
         const data = await res.json();
-        if (res.ok) {
-          showMsg("login-msg", "Signed in! Redirecting...", "success");
-          setTimeout(() => window.location.href = "/dashboard", 800);
-        } else {
-          showMsg("login-msg", data.error || "Something went wrong.", "error");
-          btn.disabled = false;
-          btn.textContent = "Sign In";
-        }
-      } catch {
-        showMsg("login-msg", "Could not reach auth server.", "error");
+        showMsg("login-msg", data.error || "Something went wrong.", "error");
         btn.disabled = false;
         btn.textContent = "Sign In";
       }
+    } catch {
+      showMsg("login-msg", "Could not reach auth server.", "error");
+      btn.disabled = false;
+      btn.textContent = "Sign In";
     }
+  }
 
-    async function doRegister() {
-      const email = document.getElementById("reg-email").value.trim();
-      const password = document.getElementById("reg-password").value;
-      const confirm = document.getElementById("reg-confirm").value;
-      const btn = document.getElementById("reg-btn");
+  async function doRegister() {
+    const email = document.getElementById("reg-email").value.trim();
+    const password = document.getElementById("reg-password").value;
+    const confirm = document.getElementById("reg-confirm").value;
+    const btn = document.getElementById("reg-btn");
 
-      if (!email || !password || !confirm) return showMsg("reg-msg", "Please fill in all fields.", "error");
-      if (password !== confirm) return showMsg("reg-msg", "Passwords do not match.", "error");
-      if (password.length < 8) return showMsg("reg-msg", "Password must be at least 8 characters.", "error");
+    if (!email || !password || !confirm) return showMsg("reg-msg", "Please fill in all fields.", "error");
+    if (password !== confirm) return showMsg("reg-msg", "Passwords do not match.", "error");
+    if (password.length < 8) return showMsg("reg-msg", "Password must be at least 8 characters.", "error");
 
-      btn.disabled = true;
-      btn.textContent = "Creating account...";
+    btn.disabled = true;
+    btn.textContent = "Creating account...";
 
-      try {
-        const res = await fetch(`${AUTH}/register`, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password })
-        });
+    try {
+      const res = await fetch(`${AUTH}/register`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      if (res.ok) {
+        showMsg("reg-msg", "Account created! Redirecting...", "success");
+        setTimeout(() => window.location.href = "/dashboard", 800);
+      } else {
         const data = await res.json();
-        if (res.ok) {
-          showMsg("reg-msg", "Account created! Redirecting...", "success");
-          setTimeout(() => window.location.href = "/dashboard", 800);
-        } else {
-          showMsg("reg-msg", data.error || "Something went wrong.", "error");
-          btn.disabled = false;
-          btn.textContent = "Create Account";
-        }
-      } catch {
-        showMsg("reg-msg", "Could not reach auth server.", "error");
+        showMsg("reg-msg", data.error || "Something went wrong.", "error");
         btn.disabled = false;
         btn.textContent = "Create Account";
       }
+    } catch {
+      showMsg("reg-msg", "Could not reach auth server.", "error");
+      btn.disabled = false;
+      btn.textContent = "Create Account";
     }
+  }
 
-    // allow enter key to submit
-    document.addEventListener("keydown", e => {
-      if (e.key !== "Enter") return;
-      const loginVisible = document.getElementById("form-login").style.display !== "none";
-      if (loginVisible) doLogin();
-      else doRegister();
-    });
-  </script>
-
-  <script>
-// This runs as soon as the page loads
-const urlParams = new URLSearchParams(window.location.search);
-const token = urlParams.get('token');
-
-if (token) {
-    // 1. SAVE IT IMMEDIATELY
-    localStorage.setItem('mcbcode_token', token);
-    
-    // 2. Clear the URL so it looks clean
-    window.history.replaceState({}, document.title, "/account");
-    
-    // 3. Force the redirect to dashboard
-    window.location.href = "/dashboard";
-}
-  </script>
+  document.addEventListener("keydown", e => {
+    if (e.key !== "Enter") return;
+    const loginVisible = document.getElementById("form-login").style.display !== "none";
+    if (loginVisible) doLogin();
+    else doRegister();
+  });
+</script>
+  
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 </body>
