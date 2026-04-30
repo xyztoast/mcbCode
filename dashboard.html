@@ -15,42 +15,21 @@
     g { color: #05ee93; }
     c { color: #e7007b; }
 
-    .topnav {
-      position: fixed; top: 0; left: 0; right: 0; height: 56px;
-      background: rgba(20, 20, 20, 0.85); backdrop-filter: blur(8px);
-      border-bottom: 1px solid #1f1f1f; display: flex; align-items: center;
-      padding: 0 16px; z-index: 200; gap: 16px;
-    }
+    .topnav { position: fixed; top: 0; left: 0; right: 0; height: 56px; background: rgba(20,20,20,0.85); backdrop-filter: blur(8px); border-bottom: 1px solid #1f1f1f; display: flex; align-items: center; padding: 0 16px; z-index: 200; gap: 16px; }
     .topnav-title { font-size: 20px; color: #ffffff; font-family: 'mcfontb', sans-serif; }
     .topnav-right { margin-left: auto; display: flex; align-items: center; gap: 16px; font-size: 14px; }
     #user-email { color: #888; font-size: 13px; }
-    .logout-btn {
-      background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe;
-      font-family: 'mcfont', sans-serif; font-size: 13px; padding: 6px 12px;
-      cursor: pointer; transition: color 0.2s, border-color 0.2s;
-    }
+    .logout-btn { background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe; font-family: 'mcfont', sans-serif; font-size: 13px; padding: 6px 12px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
     .logout-btn:hover { color: #ff5555; border-color: #ff5555; }
-    .sidebar-toggle {
-      background: none; border: none; cursor: pointer; padding: 6px;
-      color: #888; font-size: 20px; line-height: 1; transition: color 0.2s; flex-shrink: 0;
-    }
+    .sidebar-toggle { background: none; border: none; cursor: pointer; padding: 6px; color: #888; font-size: 20px; line-height: 1; transition: color 0.2s; flex-shrink: 0; }
     .sidebar-toggle:hover { color: #05ee93; }
 
     .layout { display: flex; margin-top: 56px; min-height: calc(100vh - 56px); }
 
-    .sidebar {
-      width: 220px; min-width: 220px; background: #111111;
-      border-right: 1px solid #1f1f1f; display: flex; flex-direction: column;
-      position: fixed; top: 56px; bottom: 0; left: 0;
-      transition: width 0.2s ease, min-width 0.2s ease; overflow: hidden; z-index: 100;
-    }
+    .sidebar { width: 220px; min-width: 220px; background: #111111; border-right: 1px solid #1f1f1f; display: flex; flex-direction: column; position: fixed; top: 56px; bottom: 0; left: 0; transition: width 0.2s ease, min-width 0.2s ease; overflow: hidden; z-index: 100; }
     .sidebar.collapsed { width: 52px; min-width: 52px; }
-    .sidebar-nav { display: flex; flex-direction: column; padding: 12px 0; gap: 2px; flex: 1; }
-    .sidebar-item {
-      display: flex; align-items: center; gap: 12px; padding: 10px 14px;
-      cursor: pointer; color: #888; font-size: 14px; white-space: nowrap;
-      transition: background 0.2s, color 0.2s; border-left: 3px solid transparent;
-    }
+    .sidebar-nav { display: flex; flex-direction: column; padding: 12px 0; gap: 2px; flex: 1; overflow-y: auto; }
+    .sidebar-item { display: flex; align-items: center; gap: 12px; padding: 10px 14px; cursor: pointer; color: #888; font-size: 14px; white-space: nowrap; transition: background 0.2s, color 0.2s; border-left: 3px solid transparent; }
     .sidebar-item:hover { background: #1a1a1a; color: #ffffff; }
     .sidebar-item.active { background: #1a1a1a; color: #05ee93; border-left-color: #05ee93; }
     .sidebar-item img { width: 24px; height: 24px; flex-shrink: 0; image-rendering: pixelated; opacity: 0.7; transition: opacity 0.2s; }
@@ -58,11 +37,9 @@
     .sidebar-item span { transition: opacity 0.2s; overflow: hidden; }
     .sidebar.collapsed .sidebar-item span { opacity: 0; pointer-events: none; }
     .sidebar.collapsed .sidebar-item { padding: 10px 14px; justify-content: center; }
-    .sidebar-label {
-      font-size: 12px; color: #444; line-height: 0.4em; font-family: mcfontb;
-      padding: 16px 14px 4px; white-space: nowrap; overflow: hidden; transition: opacity 0.2s;
-    }
+    .sidebar-label { font-size: 12px; color: #444; line-height: 0.4em; font-family: mcfontb; padding: 16px 14px 4px; white-space: nowrap; overflow: hidden; transition: opacity 0.2s; }
     .sidebar.collapsed .sidebar-label { opacity: 0; }
+    .sidebar-bottom { border-top: 1px solid #1f1f1f; padding: 8px 0; }
 
     .main { margin-left: 220px; flex: 1; transition: margin-left 0.2s ease; padding: 40px 48px; max-width: 100%; }
     .main.shifted { margin-left: 52px; }
@@ -84,11 +61,13 @@
 
     .empty { margin-top: 20px; padding: 40px; background: #111; border: 1px dashed #2a2a2a; text-align: center; color: #bebebe; font-size: 14px; }
 
-    /* settings */
-    select { padding: 4px; width: 100px; background-color: #111; border: 1px dashed #2a2a2a; color: #bebebe; font-family: 'mcfont', sans-serif; transition: all 0.2s ease-in-out; }
+    /* settings / account rows */
+    select { padding: 4px; width: 120px; background-color: #111; border: 1px dashed #2a2a2a; color: #bebebe; font-family: 'mcfont', sans-serif; transition: all 0.2s ease-in-out; }
     select:hover { border: 1px dashed #05ee93; color: #05ee93; }
     input[type="checkbox"] { appearance: none; -webkit-appearance: none; background-color: #323232; width: 1.5em; height: 1.5em; cursor: pointer; display: inline-block; vertical-align: middle; transition: all 0.2s ease-in-out; flex-shrink: 0; }
     input[type="checkbox"]:checked { background-color: #05ee93; }
+    .text-input { background-color: #111; border: 1px solid #2e2e2e; outline: none; padding: 6px 10px; color: #ffffff; font-family: 'mcfont', sans-serif; font-size: 14px; transition: border-color 0.2s; }
+    .text-input:focus { border-color: #05ee93; }
     #customTheme { background-color: #323232; border: none; outline: none; padding: 4px; color: #bebebe; font-family: 'mcfont', sans-serif; }
     .save-btn { padding: 6px 8px; background-color: #05ee93; border: none; outline: none; font-size: 18px; font-family: 'mcfont', sans-serif; cursor: pointer; transition: all 0.2s ease-in-out; }
     .save-btn:hover { background-color: #78e3a6; }
@@ -101,65 +80,73 @@
     /* projects */
     .project-list { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
     .project-list-header { font-size: 12px; color: #444; margin-top: 12px; }
-
-    .project-row {
-      display: flex; align-items: center; background: #141414;
-      border: 1px solid #1f1f1f; padding: 12px 16px; gap: 16px;
-    }
+    .project-row { display: flex; align-items: center; background: #141414; border: 1px solid #1f1f1f; padding: 12px 16px; gap: 16px; }
     .project-name { flex: 1; color: #ffffff; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .project-name span { color: #05ee93; }
     .project-date { font-size: 12px; color: #444; white-space: nowrap; flex-shrink: 0; }
     .project-actions { display: flex; gap: 8px; flex-shrink: 0; }
-
-    .proj-btn {
-      background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe;
-      font-family: 'mcfont', sans-serif; font-size: 12px; padding: 4px 10px;
-      cursor: pointer; transition: color 0.2s, border-color 0.2s;
-    }
+    .proj-btn { background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe; font-family: 'mcfont', sans-serif; font-size: 12px; padding: 4px 10px; cursor: pointer; transition: color 0.2s, border-color 0.2s; }
     .proj-btn:hover { color: #05ee93; border-color: #05ee93; }
     .proj-btn.ok { color: #05ee93; border-color: #05ee93; }
     .proj-btn.danger:hover { color: #ff5555; border-color: #ff5555; }
 
     /* confirm overlay */
-    .confirm-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7); z-index: 500;
-      align-items: center; justify-content: center;
-    }
+    .confirm-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 500; align-items: center; justify-content: center; }
     .confirm-overlay.visible { display: flex; }
-    .confirm-box {
-      background: #1a1a1a; border: 1px solid #2e2e2e;
-      padding: 28px 32px; min-width: 300px; text-align: center;
-    }
+    .confirm-box { background: #1a1a1a; border: 1px solid #2e2e2e; padding: 28px 32px; min-width: 320px; text-align: center; }
     .confirm-box p { font-size: 15px; color: #ffffff; margin-bottom: 8px; }
     .confirm-box small { font-size: 12px; color: #555; }
     .confirm-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
-    .confirm-yes {
-      background: #ff5555; border: none; color: #ffffff;
-      font-family: 'mcfont', sans-serif; font-size: 14px;
-      padding: 6px 18px; cursor: pointer; transition: background 0.2s;
-    }
+    .confirm-yes { background: #ff5555; border: none; color: #ffffff; font-family: 'mcfont', sans-serif; font-size: 14px; padding: 6px 18px; cursor: pointer; transition: background 0.2s; }
     .confirm-yes:hover { background: #cc0000; }
-    .confirm-no {
-      background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe;
-      font-family: 'mcfont', sans-serif; font-size: 14px;
-      padding: 6px 18px; cursor: pointer; transition: color 0.2s;
-    }
+    .confirm-no { background: #1e1e1e; border: 1px solid #2e2e2e; color: #bebebe; font-family: 'mcfont', sans-serif; font-size: 14px; padding: 6px 18px; cursor: pointer; }
     .confirm-no:hover { color: #ffffff; }
 
-    #stat-points { color: #ac8fd1; }
+    /* account section */
+    .account-field { margin-bottom: 24px; }
+    .account-field label { display: block; font-size: 12px; color: #555; margin-bottom: 6px; }
+    .account-badge { display: inline-block; background: #1a1a1a; border: 1px solid #2e2e2e; padding: 3px 8px; font-size: 12px; color: #888; margin-left: 8px; }
+    .account-badge.github { border-color: #444; color: #aaa; }
+    .danger-zone { margin-top: 40px; border-top: 1px solid #1f1f1f; padding-top: 24px; }
+    .danger-zone h3 { color: #ff5555; font-size: 15px; margin-bottom: 12px; }
+    .delete-account-btn { background: transparent; border: 1px solid #ff5555; color: #ff5555; font-family: 'mcfont', sans-serif; font-size: 14px; padding: 7px 16px; cursor: pointer; transition: background 0.2s; }
+    .delete-account-btn:hover { background: #ff5555; color: #ffffff; }
   </style>
 </head>
 <body>
 
-  <!-- delete confirmation overlay -->
+  <!-- delete save confirm -->
   <div class="confirm-overlay" id="confirm-overlay">
     <div class="confirm-box">
       <p>Delete this project?</p>
       <small id="confirm-filename"></small>
       <div class="confirm-actions">
         <button class="confirm-yes" onclick="confirmDelete()">Delete</button>
-        <button class="confirm-no" onclick="closeConfirm()">Cancel</button>
+        <button class="confirm-no" onclick="closeConfirm('save')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete account confirm step 1 -->
+  <div class="confirm-overlay" id="del-account-1">
+    <div class="confirm-box">
+      <p>Delete your account?</p>
+      <small>This will permanently delete your account, all projects, and settings.</small>
+      <div class="confirm-actions">
+        <button class="confirm-yes" onclick="delAccountStep2()">Yes, continue</button>
+        <button class="confirm-no" onclick="closeConfirm('account1')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- delete account confirm step 2 -->
+  <div class="confirm-overlay" id="del-account-2">
+    <div class="confirm-box">
+      <p>Are you absolutely sure?</p>
+      <small>There is no undo. Everything will be gone forever.</small>
+      <div class="confirm-actions">
+        <button class="confirm-yes" onclick="confirmDeleteAccount()">Delete my account</button>
+        <button class="confirm-no" onclick="closeConfirm('account2')">Cancel</button>
       </div>
     </div>
   </div>
@@ -194,11 +181,18 @@
           <img src="https://ccvaults.com/assets/10.%20Items/18.%20Consumables/Writable_Book.png" alt="">
           <span>Settings</span>
         </div>
+        <div class="sidebar-bottom">
+          <div class="sidebar-item" data-target="section-account" onclick="navTo(this)">
+            <img src="https://mcbcode.com/theme/favicon.png" alt="">
+            <span>Account</span>
+          </div>
+        </div>
       </nav>
     </div>
 
     <div class="main" id="main">
 
+      <!-- HOME -->
       <div class="dash-section" id="section-home">
         <h2>Home</h2>
         <p>Welcome back to mcb<g>Code</g>.</p>
@@ -208,12 +202,13 @@
             <div class="stat-label">Projects</div>
           </div>
           <div class="stat">
-            <div class="stat-value" id="stat-points">0</div>
+            <div class="stat-value">0</div>
             <div class="stat-label">Points</div>
           </div>
         </div>
       </div>
 
+      <!-- PROJECTS -->
       <div class="dash-section" id="section-projects">
         <h2>Projects</h2>
         <p>Your saved mcfunction projects.</p>
@@ -223,6 +218,7 @@
         </div>
       </div>
 
+      <!-- EDITOR -->
       <div class="dash-section" id="section-editor">
         <h2>Editor</h2>
         <p>Quick access to the mcbCode editor.</p>
@@ -234,24 +230,15 @@
         </div>
       </div>
 
+      <!-- SETTINGS -->
       <div class="dash-section" id="section-settings">
         <h2>Settings</h2>
         <p>Configure settings. Saved to your account.</p>
         <br>
-        <div class="settings-row">
-          <input type="checkbox" id="s-font">
-          <label for="s-font">Use Mojangles Font</label>
-        </div>
-        <div class="settings-row">
-          <input type="checkbox" id="s-light">
-          <label for="s-light">Use Light Mode</label>
-        </div>
-        <div class="settings-row">
-          <input type="checkbox" id="s-home">
-          <label for="s-light">Use Logged In Home Page</label>
-        </div>
-        <div class="settings-row">
-          <label for="s-theme">Preferred Theme:</label>
+        <h3 style="color:#fff; margin-bottom:16px;">Personalization</h3>
+        <div class="settings-row"><input type="checkbox" id="s-font"><label for="s-font">Use Mojangles Font</label></div>
+        <div class="settings-row"><input type="checkbox" id="s-light"><label for="s-light">Use Light Mode</label></div>
+        <div class="settings-row"><label for="s-theme">Preferred Theme:</label>
           <select id="s-theme">
             <option value="default">Default</option>
             <option value="neon">Neon</option>
@@ -260,13 +247,41 @@
             <option value="solid">Solid</option>
           </select>
         </div>
-        <div class="settings-row">
-          <label for="customTheme">Custom Theme Upload</label>
-          <input id="customTheme">
-        </div>
+        <div class="settings-row"><label for="customTheme">Custom Theme</label><input id="customTheme" class="text-input" style="width:200px;"></div>
+        <div class="settings-row"><input type="checkbox" id="s-tips"><label for="s-tips">Show Editor Tips</label></div>
+        <div class="settings-row"><label for="s-defname">Default Filename:</label><input type="text" id="s-defname" class="text-input" style="width:160px;" maxlength="72" placeholder="untitled"></div>
         <br>
         <button class="save-btn" id="save-btn" onclick="saveSettings()">Save</button>
         <span class="save-msg" id="save-msg"></span>
+      </div>
+
+      <!-- ACCOUNT -->
+      <div class="dash-section" id="section-account">
+        <h2>Account</h2>
+        <p>Manage your mcbCode account.</p>
+        <br>
+
+        <div class="account-field">
+          <label>EMAIL</label>
+          <span id="acct-email" style="color:#fff; font-size:14px;"></span>
+          <span class="account-badge github" id="acct-github-badge" style="display:none;">GitHub</span>
+        </div>
+
+        <div class="account-field">
+          <label>USERNAME</label>
+          <div class="settings-row" style="margin-bottom:0;">
+            <input type="text" id="acct-username" class="text-input" style="width:200px;" maxlength="32" placeholder="set a username">
+            <button class="save-btn" onclick="saveUsername()">Save</button>
+            <span class="save-msg" id="username-msg"></span>
+          </div>
+          <small style="color:#444; font-size:11px; display:block; margin-top:4px;">letters, numbers, _ and - only</small>
+        </div>
+
+        <div class="danger-zone">
+          <h3>Danger Zone</h3>
+          <p style="font-size:13px; margin-bottom:14px;">Deleting your account removes all your projects and settings permanently.</p>
+          <button class="delete-account-btn" onclick="askDeleteAccount()">Delete Account</button>
+        </div>
       </div>
 
     </div>
@@ -283,6 +298,9 @@
         if (!res.ok) return window.location.href = "/account";
         const data = await res.json();
         document.getElementById("user-email").textContent = data.email;
+        document.getElementById("acct-email").textContent = data.email;
+        if (data.is_github) document.getElementById("acct-github-badge").style.display = "";
+        if (data.username) document.getElementById("acct-username").value = data.username;
       } catch { return window.location.href = "/account"; }
 
       try {
@@ -293,6 +311,8 @@
           document.getElementById("s-light").checked   = settings.use_light_mode;
           document.getElementById("s-theme").value     = settings.editor_theme;
           document.getElementById("customTheme").value = settings.custom_theme;
+          document.getElementById("s-tips").checked    = settings.show_editor_tips;
+          document.getElementById("s-defname").value   = settings.default_filename;
         }
       } catch {}
 
@@ -306,32 +326,22 @@
     function formatDate(str) {
       if (!str) return "";
       const d = new Date(str.endsWith("Z") ? str : str + "Z");
-      return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" })
-           + " " + d.toLocaleTimeString(undefined, { hour:"2-digit", minute:"2-digit" });
+      return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" }) + " " + d.toLocaleTimeString(undefined, { hour:"2-digit", minute:"2-digit" });
     }
 
     async function loadProjects() {
       const list  = document.getElementById("project-list");
       const empty = document.getElementById("projects-empty");
       const label = document.getElementById("projects-limit-label");
-
-      // clear existing rows (but keep the empty placeholder)
       Array.from(list.querySelectorAll(".project-row")).forEach(r => r.remove());
-
       try {
         const res = await fetch(`${AUTH}/saves`, { credentials: "include" });
         if (!res.ok) throw new Error();
         const { saves, max_saves } = await res.json();
-
         document.getElementById("stat-projects").textContent = saves.length;
         label.textContent = `${saves.length} / ${max_saves} projects used`;
-
-        if (saves.length === 0) {
-          empty.style.display = "";
-          return;
-        }
+        if (saves.length === 0) { empty.style.display = ""; return; }
         empty.style.display = "none";
-
         saves.forEach(save => {
           const filename = save.filename || "untitled";
           const row = document.createElement("div");
@@ -344,20 +354,13 @@
               <button class="proj-btn" onclick="openProject('${escHtml(save.save_id)}')">Open</button>
               <button class="proj-btn" onclick="copyCode('${escHtml(save.save_id)}', this)">Copy Code</button>
               <button class="proj-btn danger" onclick="askDelete('${escHtml(save.save_id)}', '${escHtml(filename)}', this)">Delete</button>
-            </div>
-          `;
+            </div>`;
           list.appendChild(row);
         });
-
-      } catch {
-        empty.textContent = "Could not load projects.";
-        empty.style.display = "";
-      }
+      } catch { empty.textContent = "Could not load projects."; empty.style.display = ""; }
     }
 
-    function openProject(saveId) {
-      window.location.href = `/editor?save=${saveId}`;
-    }
+    function openProject(saveId) { window.location.href = `/editor?save=${saveId}`; }
 
     async function copyCode(saveId, btn) {
       const orig = btn.textContent;
@@ -366,13 +369,9 @@
         if (!res.ok) throw new Error();
         const { content } = await res.json();
         await navigator.clipboard.writeText(content);
-        btn.textContent = "Copied!";
-        btn.classList.add("ok");
+        btn.textContent = "Copied!"; btn.classList.add("ok");
         setTimeout(() => { btn.textContent = orig; btn.classList.remove("ok"); }, 2000);
-      } catch {
-        btn.textContent = "Error";
-        setTimeout(() => { btn.textContent = orig; }, 2000);
-      }
+      } catch { btn.textContent = "Error"; setTimeout(() => { btn.textContent = orig; }, 2000); }
     }
 
     function askDelete(saveId, filename, btn) {
@@ -382,35 +381,49 @@
       document.getElementById("confirm-overlay").classList.add("visible");
     }
 
-    function closeConfirm() {
-      pendingDeleteId  = null;
-      pendingDeleteRow = null;
-      document.getElementById("confirm-overlay").classList.remove("visible");
+    function closeConfirm(which) {
+      if (which === "save")     { pendingDeleteId = null; pendingDeleteRow = null; document.getElementById("confirm-overlay").classList.remove("visible"); }
+      if (which === "account1") document.getElementById("del-account-1").classList.remove("visible");
+      if (which === "account2") document.getElementById("del-account-2").classList.remove("visible");
     }
 
     async function confirmDelete() {
-      if (!pendingDeleteId) return closeConfirm();
-      const id  = pendingDeleteId;
-      const row = pendingDeleteRow;
-      closeConfirm();
-
+      if (!pendingDeleteId) return closeConfirm("save");
+      const id = pendingDeleteId; const row = pendingDeleteRow;
+      closeConfirm("save");
       try {
-        const res = await fetch(`${AUTH}/save?id=${encodeURIComponent(id)}`, {
-          method: "DELETE",
-          credentials: "include"
-        });
-        if (res.ok) {
-          row && row.remove();
-          // reload to update count + label
-          await loadProjects();
-        }
+        const res = await fetch(`${AUTH}/save?id=${encodeURIComponent(id)}`, { method: "DELETE", credentials: "include" });
+        if (res.ok) { row && row.remove(); await loadProjects(); }
       } catch {}
     }
 
-    // close confirm if clicking outside the box
-    document.getElementById("confirm-overlay").addEventListener("click", (e) => {
-      if (e.target === e.currentTarget) closeConfirm();
-    });
+    document.getElementById("confirm-overlay").addEventListener("click", e => { if (e.target === e.currentTarget) closeConfirm("save"); });
+    document.getElementById("del-account-1").addEventListener("click", e => { if (e.target === e.currentTarget) closeConfirm("account1"); });
+    document.getElementById("del-account-2").addEventListener("click", e => { if (e.target === e.currentTarget) closeConfirm("account2"); });
+
+    function askDeleteAccount() { document.getElementById("del-account-1").classList.add("visible"); }
+    function delAccountStep2() { closeConfirm("account1"); document.getElementById("del-account-2").classList.add("visible"); }
+
+    async function confirmDeleteAccount() {
+      closeConfirm("account2");
+      try {
+        await fetch(`${AUTH}/account`, { method: "DELETE", credentials: "include" });
+      } catch {}
+      window.location.href = "/account";
+    }
+
+    async function saveUsername() {
+      const val = document.getElementById("acct-username").value.trim();
+      const msg = document.getElementById("username-msg");
+      if (!val) return;
+      try {
+        const res = await fetch(`${AUTH}/profile`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ username: val }) });
+        const data = await res.json();
+        if (res.ok) { msg.textContent = "Saved!"; msg.className = "save-msg ok"; }
+        else { msg.textContent = data.error || "Error"; msg.className = "save-msg err"; }
+      } catch { msg.textContent = "Error"; msg.className = "save-msg err"; }
+      setTimeout(() => { msg.className = "save-msg"; msg.textContent = ""; }, 3000);
+    }
 
     async function saveSettings() {
       const btn = document.getElementById("save-btn");
@@ -426,11 +439,13 @@
             use_light_mode:     document.getElementById("s-light").checked,
             editor_theme:       document.getElementById("s-theme").value,
             custom_theme:       document.getElementById("customTheme").value,
+            show_editor_tips:   document.getElementById("s-tips").checked,
+            default_filename:   document.getElementById("s-defname").value,
           })
         });
         if (res.ok) { msg.textContent = "Saved!"; msg.className = "save-msg ok"; }
-        else        { msg.textContent = "Failed to save."; msg.className = "save-msg err"; }
-      } catch { msg.textContent = "Could not reach server."; msg.className = "save-msg err"; }
+        else { msg.textContent = "Failed."; msg.className = "save-msg err"; }
+      } catch { msg.textContent = "Error"; msg.className = "save-msg err"; }
       btn.disabled = false; btn.textContent = "Save";
       setTimeout(() => { msg.className = "save-msg"; msg.textContent = ""; }, 3000);
     }
@@ -455,7 +470,6 @@
     }
   </script>
 
-  <script data-goatcounter="https://mcbcode.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
+  <script data-goatcounter="https://mcbcode.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
