@@ -92,7 +92,12 @@
 
   #tryitout:hover {
       color: #ffffff;
-      background-color: #00a95c;
+      background-color: #00a459;
+  }
+
+
+  .top-btn-wrapper {
+    margin: auto;
   }
 
   .navi {
@@ -307,25 +312,108 @@
     font-family: mcfontb;
     font-weight: 0;
   }
-  </style>
+
+/* --- Dropdown Button --- */
+.dropdown-btn {
+    top: 25px;
+    right: 25px;
+    z-index: 1000;
+    color: #ffffff;
+    text-align: center;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-btn:hover {
+    color: #05ee93;
+}
+
+.dropdown {
+    position: fixed;
+    width: 100%;
+    background-color: rgba(45, 45, 45, 0.6);
+    backdrop-filter: blur(6px) !important;
+    top: 75px;
+    padding: 5px;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+/* Changed + to ~ to find the dropdown within the same parent */
+.dropdown-btn.active ~ .dropdown,
+.dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    backdrop-filter: blur(6px) !important;
+}
+
+.dropdown-content {
+    width: 80%;
+    justify-content: space-between;
+    display: flex;
+    margin: auto;
+    color: #ffffff;
+}
+
+.dropdown-content a:hover {
+    color: #05ee93;
+}
+
+#dd {
+    width: 18px;
+    height: 18px;
+    background-image: url(https://mcbcode.com/img/icons/dropdown.png);
+    background-size: cover;
+    transition: background-image 0.2s ease-in-out, transform 0.3s ease-in-out;
+
+}
+
+/* Swaps the image on hover OR when the 'active' class is present */
+#dd:hover, 
+#dd.active { 
+    background-image: url(https://mcbcode.com/img/icons/dropdown-selected.png);
+    cursor: pointer;
+}
+
+#dd.active {
+    transition: transform 0.4s ease-in-out;
+    transform: rotate(180deg);
+}
+</style>
 </head>
 <body>
+    <div class="navi">
+        <div class="navi-brand">
+            <a href="https://mcbcode.com">
+                <h2><ee style="color: #fff; font-family: mcfontb;">mcb</ee><g>Code</g></h2>
+            </a>
+        </div>
+        <div class="quick-links">
+            <a href="https://mcbcode.com/account">Account</a>
+            <div class="dropdown-btn" id="dd"></div>
+            <div class="dropdown">
+                <div class="dropdown-content">
+                    <a href="https://roadmap.mcbcode.com/terms-of-use">Terms</a>
+                    <a href="https://roadmap.mcbcode.com">Roadmap</a>
+                    <a href="https://mcbcode.com/editor">Editor</a>
+                    <a href="https://github.com/xyztoast/mcbCode">Source</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <div class="navi">
-      <div class="navi-brand"><a href="https://mcbcode.com"><h2><ee style="color: #fff; font-family: mcfontb;">mcb</aa><g>Code</g></h2></a></div>
-      <div class="quick-links">
-          <a href="https://roadmap.mcbcode.com/">Roadmap</a>
-          <a href="https://mcbcode.com/editor">Editor</a>
-          <a href="https://github.com/xyztoast/mcfunction">Source</a>
-          <a href="https://mcbcode.com/account">Account</a>
-      </div>
-  </div>
 
   <h1>mcb<span class="h1thing">Code</span></h1>
   <p style="color: #fff;">The <g>best</g> exclusively Minecraft Bedrock <c>.mcfunction</c> code editor</p>
   <div style="user-select: none;">
+    <div class="top-btn-wrapper">
       <div class="top-navi">
           <a href="https://mcbcode.com/editor"><button id="tryitout">Try it out</button></a>
+          <a href="https://mcbcode.com/dashboard"><button>Dashboard</button></a>
+      </div>
       </div>
   </div>
 
@@ -337,8 +425,10 @@
 
       <div class="demo-desc">
           <h2>Live <g>Syntax Highlighting</g></h2>
-          <p>mcbCode colors your commands as you type — commands, selectors, block names, and coordinates each get their own color so bad syntax stands out at a glance.</p>
-          <a class="demo-open-link" href="https://mcbcode.com/editor">Open Full Editor</a>
+          <p>mcbCode colors commands as you type. Commands, selectors, block names, and coordinates each get their own color so bad syntax stands out.</p>
+          <button style="font-size: 14px">
+            <a href="https://mcbcode.com/editor">Open Full Editor</a>
+            </button>
       </div>
 
       <div class="demo-editor-shell">
@@ -465,6 +555,28 @@ Not affiliated with Microsoft or Mojang AB.<br><br>
 © Copyright 2026 mcb<g>Code</g>
   <br><br>
   </footer>
+
+<script>
+    const dropdownBtn = document.getElementById('dd');
+    const dropdownMenu = document.querySelector('.dropdown');
+
+    dropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Toggle active on BOTH elements
+        dropdownBtn.classList.toggle('active');
+        dropdownMenu.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!dropdownMenu.contains(e.target) && e.target !== dropdownBtn) {
+            // Remove active from BOTH when clicking away
+            dropdownBtn.classList.remove('active');
+            dropdownMenu.classList.remove('active');
+        }
+    });
+</script>
+
+
 
   <script data-goatcounter="https://mcbcode.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
