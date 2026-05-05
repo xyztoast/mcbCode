@@ -168,6 +168,7 @@
       margin: 40px auto 0 auto;
       padding: 0 20px;
       text-align: left;
+      font-family: monospace !important;
   }
 
   .demo-desc {
@@ -268,7 +269,7 @@
       pointer-events: none;
       color: #ffffff;
       background-color: #161616;
-      font-family: monospace;
+      font-family: monospace !important;
       font-size: 14px;
       line-height: 1.5;
   }
@@ -285,7 +286,7 @@
       border: none;
       outline: none;
       resize: none;
-      font-family: monospace;
+      font-family: monospace !important;
       font-size: 14px;
       line-height: 1.5;
       white-space: pre;
@@ -295,12 +296,12 @@
       z-index: 2;
   }
 
-  .hl-cmd     { color: #ffff55; }
-  .hl-sel     { color: #ff5555; }
-  .hl-block   { color: #55ff55; }
-  .hl-coord   { color: #55ffff; }
-  .hl-key     { color: #ffaa00; }
-  .hl-comment { color: #4a4a4a; }
+  .hl-cmd     { color: #ffff55; font-family: monospace !important; }
+  .hl-sel     { color: #ff5555; font-family: monospace !important; }
+  .hl-block   { color: #55ff55; font-family: monospace !important; }
+  .hl-coord   { color: #55ffff; font-family: monospace !important; }
+  .hl-key     { color: #ffaa00; font-family: monospace !important; }
+  .hl-comment { color: #4a4a4a; font-family: monospace !important; }
 
   @media (max-width: 650px) {
       .demo-section { flex-direction: column; }
@@ -315,73 +316,81 @@
 
 /* --- Dropdown Button --- */
 .dropdown-btn {
-    top: 25px;
-    right: 25px;
-    z-index: 1000;
-    color: #ffffff;
-    text-align: center;
-    user-select: none;
-    transition: all 0.2s ease-in-out;
+  top: 25px;
+  right: 25px;
+  z-index: 1000;
+  color: #ffffff;
+  text-align: center;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
 }
 
 .dropdown-btn:hover {
-    color: #05ee93;
+  color: #05ee93;
 }
 
 .dropdown {
-    position: fixed;
-    width: 100%;
-    background-color: rgba(45, 45, 45, 0.6);
-    backdrop-filter: blur(6px) !important;
-    top: 75px;
-    padding: 5px;
-    transition: all 0.2s ease-in-out;
-    opacity: 0;
-    visibility: hidden;
-    left: 0 !important;
-    right: 0 !important;
+  position: fixed;
+  width: 90%;
+  background-color: rgba(45, 45, 45, 0.6);
+  -webkit-backdrop-filter: blur(6px) !important;
+  backdrop-filter: blur(6px) !important;
+  
+  /* ADD THESE TWO LINES */
+  z-index: 9999 !important; 
+  
+  top: 75px;
+  padding: 5px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+  margin: auto;
+  visibility: hidden;
+  left: 0 !important;
+  right: 0 !important;
 }
+
 
 /* Changed + to ~ to find the dropdown within the same parent */
 .dropdown-btn.active ~ .dropdown,
 .dropdown.active {
-    opacity: 1;
-    visibility: visible;
-    backdrop-filter: blur(6px) !important;
+  opacity: 1;
+  visibility: visible;
+  -webkit-backdrop-filter: blur(6px) !important; /* Added for compatibility */
+  backdrop-filter: blur(6px) !important;
 }
 
 .dropdown-content {
-    width: 80%;
-    justify-content: space-between;
-    display: flex;
-    margin: auto;
-    color: #ffffff;
+  width: 80%;
+  justify-content: space-between;
+  display: flex;
+  margin: auto;
+  color: #ffffff;
 }
 
 .dropdown-content a:hover {
-    color: #05ee93;
+  color: #05ee93;
 }
 
 #dd {
-    width: 18px;
-    height: 18px;
-    background-image: url(https://mcbcode.com/img/icons/dropdown.png);
-    background-size: cover;
-    transition: background-image 0.2s ease-in-out, transform 0.3s ease-in-out;
-
+  width: 18px;
+  height: 18px;
+  background-image: url(https://mcbcode.com/img/icons/dropdown.png);
+  background-size: cover;
+  transition: background-image 0.2s ease-in-out, transform 0.3s ease-in-out;
 }
 
 /* Swaps the image on hover OR when the 'active' class is present */
-#dd:hover, 
-#dd.active { 
-    background-image: url(https://mcbcode.com/img/icons/dropdown-selected.png);
-    cursor: pointer;
+#dd:hover,
+#dd.active {
+  background-image: url(https://mcbcode.com/img/icons/dropdown-selected.png);
+  cursor: pointer;
 }
 
 #dd.active {
-    transition: transform 0.4s ease-in-out;
-    transform: rotate(180deg);
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(180deg);
 }
+
 </style>
 </head>
 <body>
@@ -392,15 +401,18 @@
             </a>
         </div>
         <div class="quick-links">
+            <a href="https://mcbcode.com/editor">Editor</a>
             <a href="https://mcbcode.com/account">Account</a>
             <div class="dropdown-btn" id="dd"></div>
             <div class="dropdown">
+                <br>
                 <div class="dropdown-content">
                     <a href="https://roadmap.mcbcode.com/terms-of-use">Terms</a>
                     <a href="https://roadmap.mcbcode.com">Roadmap</a>
-                    <a href="https://mcbcode.com/editor">Editor</a>
                     <a href="https://github.com/xyztoast/mcbCode">Source</a>
+                    <a href="https://roadmap.mcbcode.com/about">About</a>
                 </div>
+                <br>
             </div>
         </div>
     </div>
@@ -446,7 +458,7 @@
                       spellcheck="false"
                       placeholder="# type your commands here..."
                       style="font-family: monospace !important;"
-                  ># welcome to mcbCode!
+                  ># welcome to mcbCode
 give @a diamond_sword 1
 tp @e[type=zombie] ~ ~10 ~
 fill ~-5 ~-1 ~-5 ~5 ~-1 ~5 grass
