@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta name="google-adsense-account" content="ca-pub-2825557346768110">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mcbcode.com">
+<meta property="og:title" content="mcbCode">
+<meta property="og:description" content="MCFunction Code Editor for Minecraft Bedrock Edition">
+<meta property="og:image" content="https://mcbcode.com/theme/favicon.png">
+<meta property="og:site_name" content="mcbCode">
+<meta name="keywords" content="minecraft bedrock mcfunction code editor minecraft bedrock">
+<meta name="description" content="First MCFunction Code Editor for Minecraft Bedrock Edition">
+<meta name="robots" content="index, follow">
+
+  <link rel="icon" href="https://mcbcode.com/theme/favicon.png">
+  <link rel="stylesheet" href="https://mcbcode.com/theme/site.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>mcbCode</title>
+  <style>
+    html,body{
+      min-height:100%;
+      margin:0;
+      font-family:'mcfont', sans-serif;
+      background:#0c0c0c;
+      font-weight: 0;
+      color:#bebebe;
+      justify-content: center;
+      margin: auto;
+      text-align: center;
+    }
+
+    h1{
+      font-family: "mcfontb", sans-serif;
+      font-size: 40px;
+      margin-top: 20vh;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    h2 {
+     font-size: 25px;
+     color: #ffffff;
+    }
+
+    a {
+        text-decoration: none;
+        color: #ffffff;
+        transition: color 0.2s ease-in-out;
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: #05ee93;
+    }
+
+  .mcbc {
+    position: fixed;
+    left: 5px;
+    top: 10px;
+    height: 50px;
+    max-width: 50px;
+  }
+
+  c {
+      color: #e7007b;
+  }
+
+  button {
+      text-align: center;
+      background-color: #313131;
+      border: none;
+      font-size: 18px;
+      padding: 8px 12px;
+      color: #ffffff;
+      transition: color 0.2s ease-in-out;
+      cursor: pointer;
+  }
+
+  button:hover {
+      color: #05ee93;
+  }
+
+  #tryitout {
+      color: #0c0c0c;
+      background-color: #05ee93;
+      box-shadow: 0 0 20px 10px #05ee934;
+      transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+      border: 4px solid #00a459;
+  }
+
+  #tryitout:hover {
+      color: #ffffff;
+      background-color: #00a459;
+  }
+
+
+  .top-btn-wrapper {
+    margin: auto;
+  }
+
+  .navi {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 75px;
+      background-color: rgba(45, 45, 45, 0.6);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      padding: 0 24px;
+      z-index: 100;
+  }
+
+  .navi-brand {
+    display: flex;
+    background-color: #9adbb31a;
+    padding: 4px 8px;
+  }
+
+  .navi-brand h2 {
+      margin: 0;
+  }
+
+  .quick-links {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+  }
+
+  .divider {
+      border-top: 2px solid #bebebe;
+      max-width: 30%;
+      opacity: 0.5;
+      margin: auto;
+      margin-top: 50px;
+  }
+
+  footer {
+    color: #bebebe;
+    background-color: #232323;
+    padding: 8px;
+    }
+
+  footer g {
+    color: #008e4c;
+    }
+
+  .pages-list {
+    display: flex;
+    padding: 4px 8px;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: space-between;
+
+  }
+
+  /* demo editor */
+  .demo-section {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      max-width: 900px;
+      margin: 40px auto 0 auto;
+      padding: 0 20px;
+      text-align: left;
+  }
+
+  .demo-desc {
+      flex: 0 0 210px;
+      color: #bebebe;
+  }
+
+  .demo-desc h2 {
+      margin-top: 0;
+      font-size: 21px;
+  }
+
+  .demo-desc p {
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 10px 0 18px 0;
+  }
+
+  .demo-open-link {
+      display: inline-block;
+      color: #0c0c0c;
+      background-color: #05ee93;
+      border: 3px solid #00a459;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-family: mcfont;
+      transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .demo-open-link:hover {
+      background-color: #00a95c;
+      color: #ffffff;
+  }
+
+  .demo-editor-shell {
+      flex: 1;
+      background-color: #1a1a1a;
+      border: 1px solid #2e2e2e;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(5, 238, 147, 0.05);
+      min-width: 0;
+      font-family: monospace !important;
+  }
+
+  .demo-editor-topbar {
+      background-color: #212121;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-bottom: 1px solid #2e2e2e;
+      user-select: none;
+      font-size: 12px;
+      color: #7a7a7a;
+  }
+
+  .demo-editor-topbar img {
+      width: 16px;
+      height: 16px;
+  }
+
+  .demo-editor-body {
+      display: flex;
+      height: 200px;
+      overflow: hidden;
+      font-family: monospace !important;
+  }
+
+  .demo-line-numbers {
+      background-color: #161616;
+      padding: 10px 10px 10px 12px;
+      text-align: right;
+      color: #444;
+      font-size: 13px;
+      line-height: 1.5;
+      user-select: none;
+      border-right: 1px solid #2a2a2a;
+      min-width: 28px;
+      overflow: hidden;
+      white-space: pre;
+      font-family: monospace;
+  }
+
+  .demo-code-wrap {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+  }
+
+  .demo-highlight {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      padding: 10px 12px;
+      box-sizing: border-box;
+      white-space: pre;
+      overflow: auto;
+      pointer-events: none;
+      color: #ffffff;
+      background-color: #161616;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+  }
+
+  .demo-textarea {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      padding: 10px 12px;
+      box-sizing: border-box;
+      background: transparent;
+      color: transparent;
+      caret-color: #05ee93;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre;
+      word-wrap: normal;
+      tab-size: 4;
+      overflow: auto;
+      z-index: 2;
+  }
+
+  .hl-cmd     { color: #ffff55; }
+  .hl-sel     { color: #ff5555; }
+  .hl-block   { color: #55ff55; }
+  .hl-coord   { color: #55ffff; }
+  .hl-key     { color: #ffaa00; }
+  .hl-comment { color: #4a4a4a; }
+
+  @media (max-width: 650px) {
+      .demo-section { flex-direction: column; }
+      .demo-desc { flex: unset; text-align: center; }
+  }
+
+  .h1thing {
+    color: #05ee93;
+    font-family: mcfontb;
+    font-weight: 0;
+  }
+
+/* --- Dropdown Button --- */
+.dropdown-btn {
+  top: 25px;
+  right: 25px;
+  z-index: 1000;
+  color: #ffffff;
+  text-align: center;
+  user-select: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdown-btn:hover {
+  color: #05ee93;
+}
+
+.dropdown {
+  position: fixed;
+  width: 100%;
+  background-color: rgba(45, 45, 45, 0.6);
+  backdrop-filter: blur(6px);
+  top: 75px;
+  padding: 5px;
+  transition: all 0.2s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+.dropdown-btn:hover + .dropdown,
+.dropdown:hover {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-btn:hover + .dropdown,
+.dropdown:hover {
+  display: block;
+}
+
+
+.dropdown-content {
+  width: 80%;
+  justify-content: space-between;
+  display: flex;
+  margin: auto;
+  color: #ffffff
+}
+
+.dropdown-content a:hover {
+  color: #05ee93;
+}
+  </style>
+</head>
+<body>
+  <div class="navi">
+      <div class="navi-brand"><a href="https://mcbcode.com"><h2><ee style="color: #fff; font-family: mcfontb;">mcb</aa><g>Code</g></h2></a></div>
+      <div class="quick-links">
+          <a href="https://mcbcode.com/account">Account</a>
+          <div class="dropdown-btn">\/</div>
+      </div>
+  </div>
+
+      <div class="dropdown">
+        <div class="dropdown-content">
+            <a href="https://roadmap.mcbcode.com">Roadmap</a>
+            <a href="https://mcbcode.com/editor">Editor</a>
+            <a href="https://github.com/xyztoast/mcbCode">Source</a>
+        </div>
+    </div>
+
+
+  <h1>mcb<span class="h1thing">Code</span></h1>
+  <p style="color: #fff;">The <g>best</g> exclusively Minecraft Bedrock <c>.mcfunction</c> code editor</p>
+  <div style="user-select: none;">
+    <div class="top-btn-wrapper">
+      <div class="top-navi">
+          <a href="https://mcbcode.com/editor"><button id="tryitout">Try it out</button></a>
+          <a href="https://mcbcode.com/dashboard"><button>Dashboard</button></a>
+      </div>
+      </div>
+  </div>
+
+  <div class="divider"></div>
+  <h2>Try it <g>Right Here</g></h2>
+  <p>Type some commands below — syntax highlighting works live, just like the real editor.</p>
+
+  <div class="demo-section">
+
+      <div class="demo-desc">
+          <h2>Live <g>Syntax Highlighting</g></h2>
+          <p>mcbCode colors commands as you type. Commands, selectors, block names, and coordinates each get their own color so bad syntax stands out.</p>
+          <button style="font-size: 14px">
+            <a href="https://mcbcode.com/editor">Open Full Editor</a>
+            </button>
+      </div>
+
+      <div class="demo-editor-shell">
+          <div class="demo-editor-topbar">
+              <img src="https://mcbcode.com/theme/favicon.png" alt="mcbCode">
+              <span style="color:#bebebe;">mcb<span style="color:#05ee93">Code</span></span>
+              <span>— demo.mcfunction</span>
+          </div>
+          <div class="demo-editor-body">
+              <div class="demo-code-wrap">
+                  <div class="demo-highlight" id="demoHighlight"></div>
+                  <textarea
+                      class="demo-textarea"
+                      id="demoArea"
+                      spellcheck="false"
+                      placeholder="# type your commands here..."
+                      style="font-family: monospace !important;"
+                  ># welcome to mcbCode!
+give @a diamond_sword 1
+tp @e[type=zombie] ~ ~10 ~
+fill ~-5 ~-1 ~-5 ~5 ~-1 ~5 grass
+say Hello from mcbCode!</textarea>
+              </div>
+          </div>
+      </div>
+
+  </div>
+
+  <script>
+  (function() {
+      const area      = document.getElementById('demoArea');
+      const highlight = document.getElementById('demoHighlight');
+
+      function highlightMCF(text) {
+          return text.split('\n').map(line => {
+              let s = line
+                  .replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;');
+
+              if (/^\s*#/.test(s)) {
+                  return '<span class="hl-comment">' + s + '</span>';
+              }
+
+              // selectors with optional brackets
+              s = s.replace(/(@[asepAr])(\[([^\]]*)\])?/g, function(match, sel, bracket, inner) {
+                  if (!bracket) return '<span class="hl-sel">' + sel + '</span>';
+                  let inside = inner.replace(/(\w+)(=)([^,\]]+)/g,
+                      '<span class="hl-key">$1</span>$2<span class="hl-block">$3</span>');
+                  return '<span class="hl-sel">' + sel + '</span>[' + inside + ']';
+              });
+
+              // relative coords and plain numbers
+              s = s.replace(/(~-?\d*\.?\d*|(?<!\w)-?\d+\.?\d*(?!\w))/g,
+                  '<span class="hl-coord">$1</span>');
+
+              // snake_case block/item names
+              s = s.replace(/\b([a-z][a-z0-9]*(?:_[a-z0-9]+)+)\b/g,
+                  '<span class="hl-block">$1</span>');
+
+              // known commands at start of line
+              const cmds = ['give','tp','teleport','fill','say','tellraw','title',
+                  'effect','summon','kill','clear','gamemode','gamerule','function','setblock',
+                  ];
+              s = s.replace(
+                  new RegExp('^(\\s*)(' + cmds.join('|') + ')\\b'),
+                  '$1<span class="hl-cmd">$2</span>'
+              );
+
+              return s;
+          }).join('\n');
+      }
+
+      function updateLineNums(text) {
+          const count = text.split('\n').length;
+          let out = '';
+          for (let i = 1; i <= count; i++) out += i + '\n';
+          lineNums.textContent = out;
+      }
+
+      function syncScroll() {
+          highlight.scrollTop  = area.scrollTop;
+          highlight.scrollLeft = area.scrollLeft;
+          lineNums.scrollTop   = area.scrollTop;
+      }
+
+      function updateAll() {
+          highlight.innerHTML = highlightMCF(area.value);
+          updateLineNums(area.value);
+          syncScroll();
+      }
+
+      area.addEventListener('input', updateAll);
+      area.addEventListener('scroll', syncScroll);
+
+      area.addEventListener('keydown', function(e) {
+          if (e.key === 'Tab') {
+              e.preventDefault();
+              const s = area.selectionStart;
+              const end = area.selectionEnd;
+              area.value = area.value.substring(0, s) + '    ' + area.value.substring(end);
+              area.selectionStart = area.selectionEnd = s + 4;
+              updateAll();
+          }
+      });
+
+      updateAll();
+  })();
+  </script>
+
+  <div class="divider"></div>
+  <h2>View the <g>Site Roadmap</g></h2>
+  <p>Site Roadmap is <c>publicly</c> available. <a href="https://roadmap.mcbcode.com">Click here</a> if you want to view it now.</p>
+ <br><br><br>
+    <div class="divider"></div>
+  <h2><g>Support</g> the Project</h2>
+  <p>Every mention helps mcb<g>Code</g>. If you find this useful, spread the word or give us a <a href="https://roadmap.mcbcode.com">star on GitHub</a>.</p>
+
+  <br><br><br><br><br>
+
+  <footer>
+  <br>
+Not affiliated with Microsoft or Mojang AB.<br><br>
+© Copyright 2026 mcb<g>Code</g>
+  <br><br>
+  </footer>
+
+  <script data-goatcounter="https://mcbcode.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
